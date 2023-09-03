@@ -19,9 +19,9 @@ public class LinkedLists_basics{
     public static class LL{
 
 
-        public  Node head;
+        public static  Node head;
 
-        public  Node tail;
+        public static Node tail;
 
         public void print(Node head){
             if(head == null){
