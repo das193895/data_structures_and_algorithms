@@ -1,4 +1,4 @@
-## The Node class in LinkedLists
+# The Node class in LinkedLists
 
 ``` java
  public class Node{
@@ -13,7 +13,7 @@
 
 ```
 
-## Displaying a linkedlist
+# Displaying a linkedlist
 
 ```java
 public void print(Node head){
@@ -137,7 +137,7 @@ public void insert_at_an_index_from_last(int idx,int newdata){ // zero based ind
 
 ```
 
-## Searching an element 
+# Searching an element 
 
 ```java
 public int search(int val){
@@ -161,4 +161,86 @@ public int search(int val){
     return -1;
 }
 
+```
+
+# Deletion in linkedlist
+
+## Deleting the first node
+
+```java
+public int deleteFirst(){
+
+    if(head == null){
+        System.out.println("the linked list is empty");
+        return Integer.MAX_VALUE;
+    }
+
+    Node temp = head;
+
+    int val = temp.data;
+
+    head = head.next;
+
+    temp.next = null;
+
+    return val;
+}
+```
+
+## Deleting the last node
+
+```java
+ public int deleteLast(){
+            
+    if(head == null){
+        System.out.println("the linked list is empty");
+        return Integer.MAX_VALUE;
+    }
+
+    int val = tail.data;
+
+    Node temp = head;
+
+    while(temp.next.next != null){
+        temp = temp.next;
+    }
+
+    temp.next = null;
+
+    tail = temp;
+
+    return val;
+}
+```
+
+## deleting the node at an index
+
+```java
+public int delete_at_an_index(int idx){  //zero based indexing
+
+    if(head == null){
+        System.out.println("the linked list is empty");
+        return Integer.MAX_VALUE;
+    }
+        
+    if(idx == 0){
+        int val = deleteFirst();
+        return val;
+    }
+
+    int i = 0;
+    Node temp = head;
+
+    while(i < idx-1){
+        temp = temp.next;
+        i++;
+    }
+
+    int val = temp.next.data;
+
+    temp.next = temp.next.next;
+
+    return val;
+
+}
 ```

@@ -164,6 +164,73 @@ public class LinkedLists{
             return -1;
         }
 
+        public int deleteFirst(){
+            if(head == null){
+                System.out.println("the linked list is empty");
+                return Integer.MAX_VALUE;
+            }
+
+            Node temp = head;
+
+            int val = temp.data;
+
+            head = head.next;
+
+            temp.next = null;
+
+            return val;
+        }
+
+        public int deleteLast(){
+            
+            if(head == null){
+                System.out.println("the linked list is empty");
+                return Integer.MAX_VALUE;
+            }
+
+            int val = tail.data;
+
+            Node temp = head;
+
+            while(temp.next.next != null){
+                temp = temp.next;
+            }
+
+            temp.next = null;
+
+            tail = temp;
+
+            return val;
+        }
+
+        public int delete_at_an_index(int idx){  //zero based indexing
+
+            if(head == null){
+                System.out.println("the linked list is empty");
+                return Integer.MAX_VALUE;
+            }
+
+            if(idx == 0){
+                int val = deleteFirst();
+                return val;
+            }
+
+            int i = 0;
+            Node temp = head;
+
+            while(i < idx-1){
+                temp = temp.next;
+                i++;
+            }
+
+            int val = temp.next.data;
+
+            temp.next = temp.next.next;
+
+            return val;
+
+        }
+
 
 
     }
@@ -176,10 +243,15 @@ public class LinkedLists{
         l1.addFirst(8);
         l1.addLast(7);
         l1.insert_at_an_index_from_last(2,5);
-        System.out.println(l1.size());
-        System.out.println(l1.search(11));
 
         l1.print(l1.head);
+        // System.out.println(l1.size());
+
+        System.out.println(l1.delete_at_an_index(0));
+
+        
+         l1.print(l1.head);
+
 
     }
     
