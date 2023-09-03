@@ -2,7 +2,7 @@ package LinkedLists;
 
 
 
-public class LinkedLists{
+public class LinkedLists_basics{
 
     public static class Node{
         int data;
