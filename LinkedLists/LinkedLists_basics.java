@@ -19,17 +19,17 @@ public class LinkedLists_basics{
     public static class LL{
 
 
-        public static  Node head;
+        public  static Node head;
 
         public static Node tail;
 
-        public void print(Node head){
-            if(head == null){
+        public void print(Node h){
+            if(h == null){
                 System.out.println("there is no existing linkedlist");
                 return;
             }
 
-            Node temp = head;
+            Node temp = h;
             while(temp != null){
                 System.out.print(temp.data+"--> ");
                 temp = temp.next;
@@ -37,12 +37,12 @@ public class LinkedLists_basics{
             System.out.println("null");
         }
 
-        public int size(){
-            if(head == null){
+        public static int size(Node h){
+            if(h == null){
                 return 0;
             }
 
-            Node temp = head;
+            Node temp = h;
             int i = 0;
             while(temp !=  null){
                 i++;
@@ -275,7 +275,7 @@ public class LinkedLists_basics{
             int i = 0;
             Node temp = head;
 
-            while(i < size()-idx){
+            while(i < size(head)-idx){
                 temp = temp.next;
                 i++;
             }
@@ -298,7 +298,7 @@ public class LinkedLists_basics{
         l1.addLast(7);
         l1.insert_at_an_index_from_last(2,5);
 
-        l1.print(l1.head);
+        l1.print(LL.head);
         // System.out.println(l1.size());
 
         System.out.println(l1.Nth_node_from_end(5));
