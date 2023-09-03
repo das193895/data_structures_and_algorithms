@@ -244,3 +244,66 @@ public int delete_at_an_index(int idx){  //zero based indexing
 
 }
 ```
+
+# Retriving data from a given index
+
+## Finding Nth node from beginning
+
+```java
+        public int Nth_node(int idx){  // zero based indexing
+
+            if(head == null){
+                System.out.println("the linked list is empty");
+                return Integer.MAX_VALUE;
+            }
+
+            if(idx == 0){
+                return head.data;
+            }
+
+            int i = 0;
+            Node temp = head;
+
+            while(i<idx){
+                temp = temp.next;
+                i++;
+            }
+
+            int val = temp.data;
+
+            return val;
+
+        }
+```
+
+## finding Nth node from the end
+
+```java
+        public int Nth_node_from_end(int idx){  // 1 based indexing from the end
+            
+            if(head == null){
+                System.out.println("linkedlist is empty");
+                return Integer.MAX_VALUE;
+            }
+
+            if(idx == 0){
+                System.out.println("one based indexing is followed so idx can't be zero");
+                return Integer.MAX_VALUE;
+            }
+
+            if(idx == 1){
+                return tail.data;
+            }
+
+            int i = 0;
+            Node temp = head;
+
+            while(i < size()-idx){
+                temp = temp.next;
+                i++;
+            }
+
+            return temp.data;
+        }
+
+```

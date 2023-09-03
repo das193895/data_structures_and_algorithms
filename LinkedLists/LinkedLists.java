@@ -231,6 +231,60 @@ public class LinkedLists{
 
         }
 
+        public int Nth_node(int idx){  // zero based indexing
+
+            if(head == null){
+                System.out.println("the linked list is empty");
+                return Integer.MAX_VALUE;
+            }
+
+            if(idx == 0){
+                return head.data;
+            }
+
+            int i = 0;
+            Node temp = head;
+
+            while(i<idx){
+                temp = temp.next;
+                i++;
+            }
+
+            int val = temp.data;
+
+            return val;
+
+        }
+
+        public int Nth_node_from_end(int idx){  // 1 based indexing from the end
+            
+            if(head == null){
+                System.out.println("linkedlist is empty");
+                return Integer.MAX_VALUE;
+            }
+
+            if(idx == 0){
+                System.out.println("one based indexing is followed so idx can't be zero");
+                return Integer.MAX_VALUE;
+            }
+
+            if(idx == 1){
+                return tail.data;
+            }
+
+            int i = 0;
+            Node temp = head;
+
+            while(i < size()-idx){
+                temp = temp.next;
+                i++;
+            }
+
+            return temp.data;
+
+
+        }
+
 
 
     }
@@ -247,10 +301,9 @@ public class LinkedLists{
         l1.print(l1.head);
         // System.out.println(l1.size());
 
-        System.out.println(l1.delete_at_an_index(0));
+        System.out.println(l1.Nth_node_from_end(5));
 
-        
-         l1.print(l1.head);
+      
 
 
     }
