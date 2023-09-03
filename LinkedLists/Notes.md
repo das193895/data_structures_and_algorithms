@@ -17,16 +17,19 @@
 
 ```java
 public void print(Node head){
+
         if(head == null){
             System.out.println("there is no existing linkedlist");
             return;
         }
 
         Node temp = head;
+
         while(temp != null){
         System.out.println(temp.data+"-->");
             temp = temp.next;
         }
+        
         System.out.println("null");
 }
 ```
@@ -61,4 +64,101 @@ public void addLast(int newdata){
         tail = node; // eventually making the new node as the new tail of the linkedlist
  
 }
+```
+
+## Insertion after a given node
+
+```java
+public void insert_after_a_given_node(Node lastNode,int newdata){
+
+    if(lastNode == null){
+        System.out.println("the given node is null");
+    }
+
+    Node node = new Node(newdata); // forming a new node with the given value
+
+    node.next = lastNode.next; // Make next of new Node as next of lastNode
+
+    lastNode.next = node; // make next of lastNode as new_node
+
+}
+```
+
+## Insertion at an index
+
+```java
+public void insert_at_an_index(int idx ,int newdata){  // zero based indexing 
+
+    if(idx == 0){
+        addFirst(newdata);
+        return;
+    }
+
+    int i = 0;
+    Node temp = head;
+
+    while(i < idx-1){
+        temp = temp.next;
+        i++;
+    }
+
+    Node node = new Node(newdata);
+
+    node.next = temp.next;
+
+    temp.next = node;
+
+}
+```
+
+## Insertion at an index from the last
+
+```java
+public void insert_at_an_index_from_last(int idx,int newdata){ // zero based indexing from the last 
+    if(idx == 0){
+        addLast(newdata);
+        return;
+    }      
+
+    int i = 0;
+    Node temp = head;
+
+    while(i < idx-2){
+        temp = temp.next;
+        i++;
+    }
+
+    Node node = new Node(newdata);
+
+    node.next = temp.next;
+
+    temp.next = node;
+}
+
+```
+
+## Searching an element 
+
+```java
+public int search(int val){
+
+    if(head == null){
+        System.out.println("the linked list is empty");
+        return -1;
+    }
+
+    Node temp = head;
+    int i = 0;
+
+    while(temp != null){
+        if(temp.data == val){
+            return i;
+        }
+        temp = temp.next;
+        i++;
+    }
+
+    return -1;
+}
+
 ```
