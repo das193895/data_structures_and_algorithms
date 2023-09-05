@@ -158,3 +158,144 @@ Steps:
     }
 
 ```
+
+## Finding the middle element
+
+```java
+    public static int middle_element(Node H){
+        if(H == null){
+            System.out.println("The linked list is empty");
+            return Integer.MAX_VALUE;
+        }
+
+        Node slow = H;
+        Node fast = H;
+
+        while(fast != null){
+
+            if(fast.next == null){
+                break;
+            }
+
+            slow = slow.next;
+            fast = fast.next.next;
+
+        }
+
+        return slow.data;
+    }
+```
+
+## Deleting the middle element
+
+```java
+    public static int delete_middle(Node H){
+        if(H == null){
+            System.out.println("The linked list is empty");
+            return Integer.MAX_VALUE;
+        }
+
+        Node slow = H;
+        Node fast = H;
+        Node prev_to_slow = H;
+
+        while(fast != null){
+
+
+            if(fast.next == null){
+                break;
+            }
+
+            if(slow == H.next){
+                prev_to_slow = prev_to_slow.next;
+            }
+
+            slow = slow.next;
+            fast = fast.next.next;
+
+        }
+
+        int val = slow.data;
+
+        prev_to_slow.next = prev_to_slow.next.next;
+
+        return val;
+
+    }
+```
+
+## Detecting cycles in linkedlists
+
+```java
+     public static boolean detect_cycle(Node H){
+            if(H == null || H.next == null){
+                System.out.println("The linked list is empty");
+                return false;
+            }
+    
+            Node slow = H;
+            Node fast = H;
+    
+            while(fast != null && fast.next != null){
+    
+                slow = slow.next;
+                fast = fast.next.next;
+    
+                if(slow == fast && slow!=H){
+                    return true;
+                }
+    
+            }
+    
+            return false;
+        }
+```
+
+## Merging 2 sorted linkedlists to form a sorted linkedlist
+
+```java
+        public static Node merge(Node H1,Node H2){
+    
+            if(H1 == null && H2 == null){
+                return null;
+            }
+    
+            if(H1 == null || H2 == null){
+                if(H1 == null){
+                    return H2;
+                }
+                else{
+                    return H1;
+                }
+            }
+    
+            LL new_linkedlist = new LL(); // making a new linkedlist
+    
+            Node ptr1 = H1;
+            Node ptr2 = H2;
+    
+            while(ptr1 != null || ptr2 != null){
+    
+                if(ptr1.data <= ptr2.data){
+                    new_linkedlist.addLast(ptr1.data);
+                    ptr1 = ptr1.next;
+                }
+                else{
+                    new_linkedlist.addLast(ptr2.data);
+                    ptr2 = ptr2.next;
+                }
+            }
+    
+            while(ptr1 != null){
+                new_linkedlist.addLast(ptr1.data);
+                ptr1 = ptr1.next;       
+            }
+    
+            while(ptr2 != null){
+                new_linkedlist.addLast(ptr2.data);
+                ptr2 = ptr2.next;       
+            }
+    
+            return new_linkedlist.head;
+        }
+```
