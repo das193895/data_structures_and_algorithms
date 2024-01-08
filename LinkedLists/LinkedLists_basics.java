@@ -286,6 +286,32 @@ public class LinkedLists_basics{
         }
 
 
+        public Node reverse(){
+            if(head == null){
+                return null;
+            }
+
+            if(head.next == null){
+                return head;
+            }
+
+            Node prev = null;
+            Node curr = head;
+
+            while(curr != null){
+                Node temp = curr.next;
+                curr.next = prev;
+                prev = curr;
+                curr = temp;
+            }
+
+            return prev;
+        }
+
+
+
+
+
 
         /****************************************************************** */
 
