@@ -217,3 +217,124 @@ class Solution {
 
 ```
 
+## Right Rotation (leetcode 189)
+
+```java
+class Solution {
+
+    public void reverse(int arr[], int ptr1 , int ptr2){
+
+        while(ptr2 > ptr1){
+            int temp = arr[ptr1];
+            arr[ptr1] = arr[ptr2];
+            arr[ptr2] = temp;
+
+            ptr1++;
+            ptr2--;
+        }
+    }
+    public void rotate(int[] nums, int k) {  // beware of corner cases
+
+        if(k == -1){
+            return;
+        }
+
+        if(nums.length == 1){
+            return;
+        }
+        
+
+        // we can solve the whole problem by this also 
+        if(k > nums.length){
+            int c = 0;
+            while(c<k){
+                int temp = nums[nums.length-1];
+                for(int j = nums.length-1;j>0;j--){
+                    nums[j] = nums[j-1];
+                }
+                nums[0] = temp;
+                c++;
+            }
+
+            return;
+        }
+        
+        // the reversal algorithm only can be used when k >= nums.length
+        reverse(nums,0,nums.length-1);
+        reverse(nums,0,k-1);
+        reverse(nums,k,nums.length-1);
+        
+    }
+}
+```
+
+## Leaders in an array (gfg)
+
+```java
+class Solution{
+    
+    static ArrayList<Integer> leaders(int arr[], int n){
+        // Your code here
+        
+        ArrayList<Integer> arr1 = new ArrayList<>();
+        
+        arr1.add(arr[n-1]);
+        
+        int max = arr[n-1];
+        
+        for(int i = n-2 ; i>=0;i--){
+            
+            if(arr[i] > max){
+                max = arr[i];
+                arr1.add(max);
+            }
+        }
+        
+        return arr1;
+    }
+}
+```
+
+## Search in rotated sorted array (leetcode - 33)
+
+```java
+// A good question apply binary search with logic
+class Solution {
+    public int search(int[] arr, int target) {
+
+        int s = 0;
+        int e = arr.length-1;
+
+        while(s <= e){
+            int mid = ((e+s)/2);
+            // int mid = mid1+1;
+
+            if(arr[mid] == target){
+                return mid;
+            }
+
+            if(arr[s] <= arr[mid]){
+                if(arr[s] <= target && target <= arr[mid]){
+                    e = mid-1;
+                }
+                else{
+                    s = mid+1;
+                }
+            }
+            else{
+                if(arr[mid] <= target && target <= arr[e]){
+                    s = mid+1;
+                }
+                else{
+                   e = mid-1; 
+                }
+
+            }
+        }
+
+        return -1;
+        
+    }
+}
+```
+
