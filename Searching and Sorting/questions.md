@@ -420,6 +420,113 @@ public class Solution extends VersionControl {
 }
 ```
 
+## Ceiling of an element in an sorted array  (the number which is >= the target element)
+
+time complexity -- O(logn)
+
+```java
+class Solution{
+    public int ceiling_element(int arr[],int num){
+        
+        // what if our num is itself greater than the largest element in the array
+        if(num > arr[arr.length-1]){
+            return -1;
+        }
+        int s = 0;
+        int e = arr.length-1;
+
+        while(s <= e){
+            int mid = s + (e-s)/2;
+
+            if(arr[mid] == num){
+                return arr[mid];
+            }
+
+            else if(arr[mid] < num){
+                s = mid + 1;
+            }
+            else{
+                e = mid - 1;
+            }
+        }
+
+        return s ;
+    }
+}
+```
+
+## floor of an element in an sorted array
+
+time complexity -- O(logn)
+```java
+class Solution{
+    public int floor_element(int arr[],int num){
+
+        if(target < arr[0]){   
+            return -1;
+        }
+
+        int s = 0;
+        int e = arr.length-1;
+
+        while(s <= e){
+            int mid = s + (e-s)/2;
+
+            if(arr[mid] == num){
+                return arr[mid];
+            }
+
+            else if(arr[mid] < num){
+                s = mid + 1;
+            }
+            else{
+                e = mid - 1;
+            }
+        }
+
+        return e;
+    }
+}
+```
+
+## Finding smallest letter greater than the target (leetcode - 744)
+
+Use simple comparision operator for comparing characters.
+time complexity -- O(logn)
+
+```java
+class Solution {
+    public char nextGreatestLetter(char[] letters, char target) {
+
+        int s = 0;
+        int e = letters.length - 1;
+
+        while( s <= e){
+            int mid = s + (e-s)/2;
+
+            if(letters[mid] <= target){
+                s = mid + 1;
+            }
+
+            else if(letters[mid] > target){
+                e = mid - 1;
+            }
+
+        }
+
+        // If there is no letter greater than the target letter return the letter at index 0. 
+
+        if(s == letters.length){
+            return letters[0];
+        }
+        else{
+            return letters[s];
+        } 
+        
+    }
+}
+```
+
 ## Two sum II (Input array is sorted) (leetcode - 167)
 
 time complexity -- O(NlogN)
@@ -493,6 +600,105 @@ class Solution {
 
         return false;
         
+    }
+}
+```
+
+## Finding the peak element in a mountain array(leetcode - 852)
+
+time complexity -- O(logn)
+
+```java
+class Solution {
+    public int peakIndexInMountainArray(int[] arr) {
+
+        int s = 0;
+        int e = arr.length - 1;
+
+        while (s <= e){
+
+            int mid = s + (e-s)/2;
+
+            if(mid == 0){
+                s = mid+1;
+            }
+
+            else if(mid == arr.length - 1){
+                e = mid - 1;
+            }
+
+            else if(arr[mid-1]<arr[mid] && arr[mid] > arr[mid+1]){
+                return mid;
+            }
+
+            else if(arr[mid] < arr[mid+1]){
+                s = mid + 1;
+            }
+
+            else if(arr[mid-1]>arr[mid]){
+                e = mid - 1;
+            }
+
+        }
+
+        return s;
+        
+    }
+}
+```
+
+## Finding first and last position of an element in a sorted array (leetcode - 34)
+
+time complexity -- O(logn)
+
+```java
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+
+        int[] arr = {-1,-1};
+
+        // finding the first occurance (apply binary search)
+        int s = 0;
+        int e = nums.length - 1;
+
+        while ( s <= e){
+            int mid = s + (e-s)/2;
+
+            if(nums[mid] == target){
+                arr[0] = mid;
+                e = mid - 1;
+            }
+
+            else if(nums[mid] > target){
+                e = mid - 1;
+            }
+            else{
+                s = mid + 1;
+            }
+        }
+        
+
+        // finding the last occurance (apply binary search)
+        s = 0;
+        e = nums.length - 1;
+
+        while ( s <= e){
+            int mid = s + (e-s)/2;
+
+            if(nums[mid] == target){
+                arr[1] = mid;
+                s = mid + 1;
+            }
+
+            else if(nums[mid] > target){
+                e = mid - 1;
+            }
+
+            else{
+                s = mid + 1;
+            }
+        }
+        return arr;
     }
 }
 ```
