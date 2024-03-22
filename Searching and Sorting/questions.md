@@ -703,3 +703,184 @@ class Solution {
 }
 ```
 
+## Single element in an sorted array (leetcode - 540)
+
+time complexity -- O(logn) (apply binary search)
+
+Case 1 -- If mid element is not equal to mid+1 element  and mid-1 element. This case returns the answer.
+Case 2 -- When mid element is even and equal to mid+1 element this means number is not present in the left side of the array. In this case start pointer will change to mid+1.
+Case 3 -- When mid element is odd and equal to mid-1 element this means number is not present in the left side of the array. In this case start pointer will change to mid+1.
+Case 4-- When mid element is odd and equal to mid+1 element this means number is not present in the right side of the array. In this case end pointer will change to mid-1.
+Case 5 -- When mid element is even and equal to mid-1 element this means number is not present in the right side of the array. In this case end pointer will change to mid-1. 
+
+```java
+class Solution {
+    public int singleNonDuplicate(int[] arr) {
+
+        if(arr.length == 1){
+            return arr[0];
+        }
+
+        int s = 0;
+        int e = arr.length - 1;
+
+        while(s <= e){
+            int mid = s + (e-s)/2;
+
+            if(mid == 0 && arr[mid] != arr[mid + 1]){
+                return arr[mid];
+            }
+
+            else if(mid == arr.length-1 && arr[mid-1] != arr[mid]){
+                return arr[mid];
+            }
+
+            else if(arr[mid] != arr[mid+1] && arr[mid-1] != arr[mid]){
+                return arr[mid];
+            }
+
+            else if((mid % 2 == 0 && arr[mid] == arr[mid+1]) || (mid % 2 != 0 && arr[mid] == arr[mid-1]) ){
+                s = mid + 1;
+            }
+
+            else if((mid % 2 != 0 && arr[mid] == arr[mid+1]) || (mid % 2 == 0 && arr[mid] == arr[mid-1]) ){
+                e = mid - 1;
+            }
+        }
+
+        return s;
+        
+    }
+}
+```
+
+## Searching in a rotated soreted array (leetcode -- 33)
+
+time complexity -- O(logn)
+
+logic -- After finding the mid element .... you will always find that one part of the array is always sorted
+
+```java
+class Solution {
+    public int search(int[] arr, int target) {
+
+        if(arr.length == 1 && target == arr[0]){
+            return 0;
+        }
+        else if(arr.length == 1 && target != arr[0]){
+            return -1;
+        }
+
+        int s = 0;
+        int e = arr.length-1;
+
+
+        while(s <= e){
+            int mid = s + (e-s)/2;
+
+            if(arr[mid] == target){
+                return mid;
+            }
+
+            // check if left part is sorted and the target is present in the left part or not
+
+            else if ((arr[s] <= arr[mid])){
+                if(arr[s] <= target && target <= arr[mid]){
+                    e = mid -1;
+                }
+                else{
+                    s = mid + 1;
+                }
+            }
+
+            // check if right part is sorted and the target is present in the right part or not
+
+            else if((arr[e] >= arr[mid])){
+                if(arr[mid] <= target && target <= arr[e]){
+                    s = mid + 1;
+                }
+
+                else{
+                    e = mid -1;
+                }
+            }
+        }
+
+        return -1;
+        
+    }
+
+}
+
+```
+
+## Searching in a rotated soreted array (leetcode -- 81)
+
+time complexity -- O(logn)
+
+dry run with examples -- 
+
+nums = [1,0,1,1,1] , target = 0
+
+nums = [1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1] , target = 2
+
+```java
+class Solution {
+    public boolean search(int[] nums, int target) {
+
+        if(nums.length == 1 && nums[0] == target){
+            return true;
+        }
+        else if(nums.length == 1 && nums[0] != target){
+            return false;
+        }
+
+        int s = 0;
+        int e = nums.length - 1;
+
+        while(s <= e){
+            int mid = s + (e-s)/2;
+
+            if(nums[mid] == target){
+                return true;
+            }
+
+            // Important 3 conditions (If we are not able to find the sorted half)
+            else if(nums[s] == nums[mid] && nums[mid] == nums[e]){
+                    s = s + 1;
+                    e = e - 1;
+                }
+
+            else if(nums[s] == nums[mid] && nums[mid] != nums[e]){
+                s = mid + 1;
+            }
+
+            else if(nums[s] != nums[mid] && nums[mid] == nums[e]){
+                e = mid - 1;
+            }
+
+
+            else if(nums[s] <= nums[mid]){
+                if(nums[s] <= target && target <= nums[mid]){
+                    e = mid - 1;
+                }
+                else {
+                    s = mid + 1;
+                }
+            }
+
+            else if(nums[mid] <= nums[e]){
+                if(nums[mid] <= target && target <= nums[e]){
+                    s = mid + 1;
+                }
+                else {
+                    e = mid - 1;
+                }
+            }
+        }
+
+        return false;
+    }
+}
+```
+
