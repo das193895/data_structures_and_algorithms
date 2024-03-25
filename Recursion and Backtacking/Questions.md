@@ -26,7 +26,7 @@
     }
 ```
 
-## calculation of Fibonacci 
+## calculation of Fibonacci (leetcode -- 509)
 
 ```java
     public static int fibonacci(int n){
@@ -45,7 +45,7 @@
     }
 ```
 
-## Recursive binary search
+## Recursive binary search (leetcode - 704)
 
 ```java
 class Solution {
@@ -55,7 +55,7 @@ class Solution {
         return recursive_binary_search(nums , 0 , nums.length-1 ,target);
         
     }
-    
+
     public int recursive_binary_search(int[] arr , int ptr1 , int ptr2 ,int target){
         
         if(ptr1 > ptr2){
@@ -79,5 +79,56 @@ class Solution {
         
     }
    
+}
+```
+
+## Sum triangle from array(gfg)
+
+```java
+    public static void sum_triangle(ArrayList<Integer> arr){
+        if(arr.size() == 0){
+            return;
+        }
+        
+        ArrayList<Integer> list = new ArrayList<>();
+        
+        for(int i = 1 ; i<arr.size();i++){
+            list.add(arr.get(i) + arr.get(i-1));
+        }
+        
+        sum_triangle(list);
+        
+        for(int i = 0 ; i<arr.size();i++){
+            System.out.print(arr.get(i)+" ");
+        }
+        System.out.println();
+    }
+    
+```
+
+## Reverse Array Recursively (leetcode -- 344)
+
+```java
+class Solution {
+
+    public void reverse_helper(char[] s , int ptr1 , int ptr2){
+        if(ptr1 > ptr2){
+            return;
+        }
+
+        char temp = s[ptr1];
+        s[ptr1] = s[ptr2];
+        s[ptr2] = temp; 
+
+        ptr1 = ptr1 + 1;
+        ptr2 = ptr2 - 1; 
+
+        reverse_helper(s,ptr1,ptr2);
+    }
+    public void reverseString(char[] s) {
+
+        reverse_helper(s,0,s.length-1);
+        
+    }
 }
 ```
