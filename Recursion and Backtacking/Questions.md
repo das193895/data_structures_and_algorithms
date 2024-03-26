@@ -26,6 +26,17 @@
     }
 ```
 
+## Calculating factorial
+
+```java
+    public static int factorial(int n) {
+        if(n == 0 || n == 1){
+            return 1;
+        }
+        return n * factorial(n-1);
+    }
+```
+
 ## calculation of Fibonacci (leetcode -- 509)
 
 ```java
@@ -131,4 +142,76 @@ class Solution {
         
     }
 }
+```
+
+## Number of steps to Reduce a number to zero (leetcode -- 1342)
+
+```java
+class Solution {
+     public int numberOfSteps_h(int num,int count) {
+
+        if(num == 0){
+            return count;
+        }
+
+        else if(num % 2 == 0){
+            num = num / 2;
+            count = count + 1;
+            return numberOfSteps_h(num,count);
+        }
+
+        else {
+            num = num - 1;
+            count = count + 1;
+            return numberOfSteps_h(num,count); 
+        }
+        
+    }
+    public int numberOfSteps(int num) {
+
+        return numberOfSteps_h(num,0);
+        
+    }
+}
+```
+
+## Recursively checking If an array is sorted or not (gfg)
+
+```java
+class Solution {
+    boolean arraySortedOrNot(int[] arr, int n) {
+        // code here
+        
+        if(n == 1 || n == 0){
+            return true;
+        }
+        
+        if(arr[n-1] < arr[n-2]){
+            return false;
+        }
+        
+        return arraySortedOrNot(arr, n-1);
+        
+    }
+}
+```
+
+## Finding all subsets of a given string 
+
+```java
+    public static void subset_helper(String p , String up){
+        
+        if(up.length() == 0){
+            System.out.print(p+" ");
+            return;
+        }
+        
+        subset_helper(p+up.charAt(0) , up.substring(1));
+        subset_helper(p , up.substring(1));
+    
+    }
+    public static void subset(String str){
+        subset_helper("" , str);
+        
+    }
 ```
