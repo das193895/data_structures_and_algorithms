@@ -84,3 +84,61 @@ class BinaryTree
 }
 ```
 
+## Levelorder traversal (BFS) 
+
+```java
+class Solution
+{
+    //Function to return the level order traversal of a tree.
+    static ArrayList <Integer> levelOrder(Node root) 
+    {
+        // Your code here
+        ArrayList<Integer> arr = new ArrayList<>();
+        
+        Queue<Node> q = new LinkedList<>();
+        
+        q.add(root);
+        
+        while(!q.isEmpty()){
+            Node node = q.poll();
+            int val = node.data;
+            
+            arr.add(val);
+            
+            if(node.left != null){
+                q.add(node.left);
+            }
+            
+            if(node.right != null){
+                q.add(node.right);
+            }
+        }
+        return arr;
+    }
+}
+```
+
+## Invert a binary tree / Mirror of a binary tree
+
+```java
+class Solution {
+    // Function to convert a binary tree into its mirror tree.
+    void mirror(Node node) {
+        // Your code here
+        
+        if(node == null){
+            return;
+        }
+        
+        Node left = node.left;
+        Node right = node.right;
+        
+        node.left = right;
+        node.right = left;
+        
+        mirror(node.left);
+        mirror(node.right);
+    }
+}
+```
+
