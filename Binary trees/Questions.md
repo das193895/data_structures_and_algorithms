@@ -1,3 +1,5 @@
+# Level -- Easy
+
 ## Inorder traversal
 
 (left , root , right)
@@ -141,4 +143,81 @@ class Solution {
     }
 }
 ```
+
+## Transforming to sum tree (gfg)
+
+```java
+class Solution{
+    public void toSumTree(Node root){
+         //add code here.
+        
+        toSumTreeHelper(root);
+         
+    }
+    
+    public int toSumTreeHelper(Node root){
+        
+        if(root == null){
+            return 0;
+        }
+        
+        int val = root.data;
+        
+        int left_val = toSumTreeHelper(root.left);
+        int right_val =toSumTreeHelper(root.right);
+        
+        root.data = left_val+right_val;
+        
+        return val+left_val+right_val;
+        
+    }
+
+}
+```
+
+
+
+
+## Level -- Medium
+
+## Lowest Common Ancestor Of 2 nodes in a binary tree (leetcode -- 236 & gfg)
+
+```java
+class Solution
+{
+    //Function to return the lowest common ancestor in a Binary Tree.
+	Node lca(Node root, int n1,int n2)
+	{
+		// Your code here
+		
+		if(root == null){
+		    return null;
+		}
+		
+		if(root.data == n1 || root.data == n2){
+		    return root;
+		}
+		
+		Node lca_left = lca(root.left , n1 ,n2);
+		Node lca_right = lca(root.right , n1 , n2);
+		
+		if(lca_left != null && lca_right != null){
+		    return root;
+		}
+		
+		else if(lca_left != null && lca_right == null){
+		    return lca_left;
+		}
+		
+		else if(lca_right != null && lca_left == null){
+		    return lca_right;
+		}
+		
+		return null;
+	}
+}
+
+```
+
+
 
