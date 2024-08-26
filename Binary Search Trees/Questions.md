@@ -166,6 +166,96 @@ class Solution
 }
 ```
 
+## BST contains a deadEnd or not (gfg)
+
+```java
+class Solution
+{   
+    static int min = 1;
+    static int max = Integer.MAX_VALUE;
+    
+    public static boolean isDeadEnd(Node root)
+    {
+        //Add your code here.
+        
+        boolean[] val = new boolean[1];
+        
+        helper(root , min , max , val);
+        
+        return val[0];
+
+    }
+    
+    public static void helper(Node root ,int min ,int max, boolean[] val){
+        if(root == null){
+            return;
+        }
+        
+        if(root.left == null && root.right == null){
+            if(min == max){
+                val[0] = true;
+                
+            }
+        }
+        
+        helper(root.left , min , root.data - 1 , val);
+        helper(root.right , root.data+1 , max , val);
+    }
+
+}
+```
+
+## Finding inorder successor and predecessor of a binary tree (gfg)
+
+```java
+class Solution {
+    public static void findPreSuc(Node root, Node[] pre, Node[] suc, int key) {
+        // code here.
+        // update pre[0] with the predecessor of the key
+        // update suc[0] with the successor of the key
+        
+        pre[0] = new Node(-1);
+        suc[0] = new Node(-1);
+        
+        findPre(root , pre , key);
+        findSuc(root , suc , key);
+        
+    }
+    
+    public static void findPre(Node root , Node[] pre , int key){
+        if(root == null){
+            return;
+        }
+        
+        else if(root.data < key){
+            pre[0] = root;
+            findPre(root.right , pre, key);
+        }
+        
+        else if(root.data >= key){
+            findPre(root.left , pre ,key);
+        }
+    }
+    
+    public static void findSuc(Node root , Node[] suc , int key){
+        if(root == null){
+            return;
+        }
+        
+        else if(root.data > key){
+            suc[0] = root;
+            findSuc(root.left , suc , key);
+        }
+        
+        else if(root.data <= key){
+            findSuc(root.right , suc , key);
+        }
+    }
+
+    
+}
+```
+
 
 # Level - Medium
 
