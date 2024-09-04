@@ -194,6 +194,158 @@ class Solution {
 }
 ```
 
+# DP On Strings
+
+## Longest Common Subsequence (leetcode -- 1143) (Medium)
+
+```java
+
+class Solution {
+
+    /*Memoization*/
+
+    public int longestCommonSubsequence(String text1, String text2) {
+
+        int[][] dp = new int[text1.length() + 1][text2.length() + 1];
+
+        for(int i = 0;i<dp.length;i++){
+            for(int j = 0;j<dp[0].length;j++){
+                dp[i][j] = -1;
+            }
+        }
+
+        return helper(text1.length() , text2.length() , text1 , text2 , dp);
+
+    }
+
+    public int helper(int idx1 , int idx2 , String text1 , String text2 ,int[][] dp){
+
+        if(idx1 == 0 || idx2 == 0){
+            return 0;
+        }
+
+        if(text1.charAt(idx1-1) == text2.charAt(idx2-1)){
+            return 1 + helper(idx1-1 , idx2 -1 , text1 , text2 , dp);
+        }
+
+        if(dp[idx1][idx2] != -1){
+            return dp[idx1][idx2];
+        }
+
+        int no_match = Math.max(helper(idx1 - 1 , idx2 , text1 , text2 , dp) , helper(idx1 , idx2 - 1, text1 , text2 , dp));
+
+        dp[idx1][idx2] = no_match;
+
+        return no_match;
+
+    }
+
+    /*Tabulation*/
+
+    public int longestCommonSubsequence(String text1, String text2) {
+
+        int[][] dp = new int[text1.length() + 1][text2.length() + 1];
+
+        for(int j = 0;j<dp[0].length;j++){
+            dp[0][j] = 0;
+        }
+
+        for(int i = 0;i<dp.length;i++){
+            dp[i][0] = 0;
+        }
+
+        for(int i = 1 ;i<dp.length;i++){
+            for(int j = 1 ;j<dp[0].length;j++){
+                if(text1.charAt(i-1) == text2.charAt(j-1)){
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                }
+                else{
+                    dp[i][j] = Math.max(dp[i-1][j] , dp[i][j-1]);
+                }
+            }
+        }
+
+        return dp[text1.length()][text2.length()];
+
+    }
+
+}
+
+```
+## Printing the longest Common Subsequence  
+
+-> Will not work if there is several longest common subsequences . It can only generate one of the longest common usubsequences incase of multiple subsequences possible;
+
+```java
+ public static String printLongestCommonSubsequence(String text1 , String text2){
+        
+        // first make the dp matrix of finding the length of the longest common subsequence
+        
+        int[][] dp = new int[text1.length() + 1][text2.length() + 1];
+        
+        for(int j = 0;j<dp[0].length;j++){
+            dp[0][j] = 0;
+        }
+        
+        for(int i = 0;i<dp.length;i++){
+            dp[i][0] = 0;
+        }
+        
+        for(int i = 1 ; i < dp.length ; i++){
+            for(int j = 1;j<dp[0].length ; j++){
+                if(text1.charAt(i-1) == text2.charAt(j-1)){
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                }
+                else{
+                    dp[i][j] = Math.max(dp[i-1][j] , dp[i][j-1]);
+                }
+            }
+        }
+        
+        // Then backtrack in the dp matrix to findout the longest common subsequence
+        
+        StringBuilder sb = new StringBuilder("");
+        
+        int i = dp.length - 1;
+        int j = dp[0].length - 1;
+        
+        while(i > 0 && j > 0){
+            
+            if(text1.charAt(i-1) == text2.charAt(j-1)){
+                sb.append(text1.charAt(i-1));
+                i--;
+                j--;
+            }
+            
+            else{
+                if(dp[i][j-1] > dp[i-1][j]){
+                    j = j-1;
+                }
+                else{
+                    i = i-1;
+                }
+            }
+        }
+        
+        // reverse the stringBuilder sb
+        
+        int ptr1 = 0;
+        int ptr2 = sb.length()-1;
+        
+        while(ptr1 <= ptr2){
+            char temp = sb.charAt(ptr1);
+            sb.setCharAt(ptr1 , sb.charAt(ptr2));
+            sb.setCharAt(ptr2 , temp);
+            
+            ptr1++;
+            ptr2--;
+        }
+        
+        return sb.toString();
+        
+    }
+```
+
 
 # DP On stocks
 
@@ -456,5 +608,4 @@ class Solution {
     }
 }
 ```
-
 
