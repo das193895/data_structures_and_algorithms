@@ -453,4 +453,157 @@ class Solution
 }
 ```
 
+## Dijkstra's Algo (gfg) (Medium)
+
+```java
+class Solution
+{   
+    
+    public static class Pair{
+        int first;
+        int second;
+        public Pair(int f , int s){
+            this.first = f;
+            this.second = s;
+        }
+    }
+    //Function to find the shortest distance of all the vertices
+    //from the source vertex S.
+    static int[] dijkstra(int V, ArrayList<ArrayList<ArrayList<Integer>>> adj, int S)
+    {
+        // Write your code here
+        
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a,b)-> {
+            if(a.first != b.first){
+                return a.first - b.first;
+            }
+            else{
+                return a.second - b.second;
+            }
+        });
+        
+        int[] distance = new int[V];
+        for(int i = 0;i<distance.length;i++){
+            distance[i] = (int)(1e9);
+        }
+        
+        distance[S] = 0;
+        
+        pq.add(new Pair(S , 0));
+        
+        while(!pq.isEmpty()){
+            Pair node = pq.poll();
+            
+            int nodeVal = node.first;
+            int nodeDistance = node.second;
+            
+            for(int i = 0;i<adj.get(nodeVal).size();i++){
+                ArrayList<Integer> neighbors = adj.get(nodeVal).get(i);
+                int neighborsNode = neighbors.get(0);
+                int neighborsDist = neighbors.get(1);
+                
+                int newDist = neighborsDist + nodeDistance;
+                
+                if(newDist < distance[neighborsNode]){
+                    distance[neighborsNode] = newDist;
+                    pq.add(new Pair(neighborsNode , newDist));
+                }
+            }
+        }
+        
+        return distance;
+    }
+}
+```
+
+## Shortest Path in undirected graph (gfg) (Medium)
+
+```java
+class Solution {
+    
+    public class Pair{
+        int first;
+        int second;
+        public Pair(int f , int s){
+            this.first = f;
+            this.second = s;
+        }
+    }
+    
+    public int[] shortestPath(int[][] edges,int n,int m ,int src) {
+        // Code here
+        
+        // make the adj list 
+        
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+        
+        for(int i = 0;i<n;i++){
+            adj.add(new ArrayList<>());
+        }
+        
+        for(int i = 0 ; i < edges.length;i++){
+            
+            int firstNode = edges[i][0];
+            int secondNode = edges[i][1];
+            
+            ArrayList<Pair> arr1 = adj.get(firstNode);
+            arr1.add(new Pair(secondNode , 1));
+            
+            ArrayList<Pair> arr2 = adj.get(secondNode);
+            arr2.add(new Pair(firstNode , 1));
+            
+        }
+        
+        // Apply dijkstra
+        
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a,b)->{
+            if(a.first != b.first){
+                return a.first-b.first;
+            }
+            else{
+                return a.second - b.second;
+            }
+        });
+        
+        int[] distance = new int[n];
+        for(int i = 0;i<distance.length;i++){
+            distance[i] = (int)1e9;
+        }
+        
+        distance[src] = 0;
+        pq.add(new Pair(src , 0));
+        
+        while(!pq.isEmpty()){
+            Pair node = pq.poll();
+            
+            int nodeVal = node.first;
+            int nodeDistance = node.second;
+            
+            for(int i = 0;i<adj.get(nodeVal).size();i++){
+                Pair neighbors = adj.get(nodeVal).get(i);
+                
+                int neighborsNode = neighbors.first;
+                int neighborsDist = neighbors.second;
+                
+                int newDist = nodeDistance + neighborsDist;
+                
+                if(newDist < distance[neighborsNode]){
+                    distance[neighborsNode] = newDist;
+                    pq.add(new Pair(neighborsNode , newDist));
+                }
+            }
+        }
+        
+        for(int i = 0;i<distance.length;i++){
+            if(distance[i] == (int)1e9){
+                distance[i] = -1;
+            }
+        }
+        
+        return distance;
+        
+    }
+}
+```
+
 

@@ -120,6 +120,22 @@ class Solution
 }
 ```
 
+## Maximum depth of a binary tree (leetcode - 104) (Easy)
+
+```java
+class Solution {
+    public int maxDepth(TreeNode root) {
+
+        if(root == null){
+            return 0;
+        }
+
+        return Math.max(maxDepth(root.left) , maxDepth(root.right)) +1;
+        
+    }
+}
+```
+
 ## Invert a binary tree / Mirror of a binary tree
 
 ```java

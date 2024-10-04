@@ -1,23 +1,18 @@
 ## Finding largest element in an array
 
 ```java
-class Compute {
-    
-    public int largest(int arr[], int n)
-    {
+class Solution {
+    public static int largest(int[] arr) {
+        // code here
         
-        int l = Integer.MIN_VALUE;
-        
+        int largest = Integer.MIN_VALUE;
         for(int i = 0;i<arr.length;i++){
-            if(arr[i] > l){
-                l = arr[i];
-            }
+            largest = Math.max(largest,arr[i]);
         }
-        
-        return l;
-        
+        return largest;
     }
 }
+
 ```
 
 ## Finding minimum and maximum element in an array
@@ -130,6 +125,21 @@ class Solution
     }
 }
 ```
+
+## Check if array is sorted or not (gfg)
+
+```java
+class Solution {
+    public boolean arraySortedOrNot(List<Integer> arr) {
+        for(int i = 1;i<arr.size();i++){
+            if(arr.get(i) < arr.get(i-1)){
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
 ## Reversing an array
 
 ```java
@@ -155,6 +165,30 @@ class Solution
 ## Removing duplicates from a sorted array (leetcode - 26)
 
 ```java
+// method - 1
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int current_element = nums[0];
+        int count = 1;
+
+        int ptr1 = 1;
+
+        while(ptr1 < nums.length){
+            if(nums[ptr1] == current_element){
+                ptr1++;
+            }
+            else if(nums[ptr1] != current_element){
+                current_element = nums[ptr1];
+                count++;
+                nums[count-1] = current_element;
+                ptr1++;
+            }
+        }
+        return count;
+    }
+}
+
+// method - 2
 class Solution {
     public int removeDuplicates(int[] nums) {
 
@@ -171,7 +205,6 @@ class Solution {
                 nums[ptr1] = nums[ptr2];
             }
         } 
-
         return ptr1+1;   
     }
 }
@@ -221,48 +254,136 @@ class Solution {
 
 ```java
 class Solution {
-
-    public void reverse(int arr[], int ptr1 , int ptr2){
-
-        while(ptr2 > ptr1){
-            int temp = arr[ptr1];
-            arr[ptr1] = arr[ptr2];
-            arr[ptr2] = temp;
-
+    public void reverse(int[] nums , int ptr1 , int ptr2){
+        while(ptr1 < ptr2){
+            int temp = nums[ptr1];
+            nums[ptr1] = nums[ptr2];
+            nums[ptr2] = temp; 
             ptr1++;
             ptr2--;
         }
     }
-    public void rotate(int[] nums, int k) {  // beware of corner cases
+    public void rotate(int[] nums, int k) {
 
-        if(k == -1){
-            return;
+        int new_k = -1;
+
+        if(k == nums.length){
+            new_k = 0;
+        }else if(k < nums.length){
+            new_k = k;
+        }else if(k > nums.length){
+            new_k = k % nums.length;
         }
 
-        if(nums.length == 1){
-            return;
-        }
-        
+        reverse(nums , nums.length - new_k , nums.length - 1);
+        reverse(nums , 0 , nums.length - new_k - 1);
+        reverse(nums , 0 , nums.length - 1);
+    }
+}
+```
 
-        // we can solve the whole problem by this also 
-        if(k > nums.length){
-            int c = 0;
-            while(c<k){
-                int temp = nums[nums.length-1];
-                for(int j = nums.length-1;j>0;j--){
-                    nums[j] = nums[j-1];
-                }
-                nums[0] = temp;
-                c++;
+## Left rotation (gfg)
+
+```java
+class Solution{
+     public void reverse(int[] nums , int ptr1 , int ptr2){
+        while(ptr1 < ptr2){
+            int temp = nums[ptr1];
+            nums[ptr1] = nums[ptr2];
+            nums[ptr2] = temp; 
+            ptr1++;
+            ptr2--;
+        }
+    }
+    void leftRotate(int nums[], int k) {
+        int new_k = -1;
+
+        if(k == nums.length){
+            new_k = 0;
+        }else if(k < nums.length){
+            new_k = k;
+        }else if(k > nums.length){
+            new_k = k % nums.length;
+        }
+
+        reverse(nums , 0 , new_k - 1);
+        reverse(nums , new_k , nums.length - 1);
+        reverse(nums , 0 , nums.length - 1);
+    }
+}
+   
+```
+
+## Check if Array is sorted and rotated(leetcode - 1752)
+
+```java
+class Solution {
+    public boolean check(int[] arr) {
+
+        int count = 0;
+
+        for(int i = 1;i<arr.length;i++){
+            if(arr[i] < arr[i-1]){
+                count++;
             }
-
-            return;
         }
-        
-        // the reversal algorithm only can be used when k >= nums.length
-        reverse(nums,0,nums.length-1);
-        reverse(nums,0,k-1);
-        reverse(nums,k,nums.length-1);
+
+        if(arr[0] < arr[arr.length-1]){
+            count++;
+        }
+
+        if(count <= 1){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+}
+```
+
+## Intersection of two Arrays (leetcode - 349)
+
+```java
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+
+        ArrayList<Integer> arr = new ArrayList<>();
+
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+
+        int ptr1 = 0;
+        int ptr2 = 0;
+
+        while(ptr1 < nums1.length && ptr2 < nums2.length){
+            if(nums1[ptr1] < nums2[ptr2]){
+                ptr1++;
+
+            }
+            else if(nums1[ptr1] > nums2[ptr2]){
+                ptr2++;
+                
+            }
+            else if(nums1[ptr1] == nums2[ptr2]){
+                if(arr.size() == 0){
+                    arr.add(nums1[ptr1]);
+                }
+                else if(arr.get(arr.size()-1) != nums1[ptr1]){
+                    arr.add(nums1[ptr1]);
+                }
+                ptr1++;
+                ptr2++;
+                
+            }
+        }
+
+        int[] intersection = new int[arr.size()];
+        for(int i = 0;i<arr.size();i++){
+            intersection[i] = arr.get(i);
+        }
+
+        return intersection;
         
     }
 }
