@@ -340,6 +340,66 @@ class Solution {
         }
     }
 }
+``` 
+
+## Union of two sorted arrays (gfg)
+
+```java
+class Solution
+{
+    //Function to return a list containing the union of the two arrays.
+    public static ArrayList<Integer> findUnion(int arr1[], int arr2[], int n, int m)
+    {
+        // add your code here
+        
+        ArrayList<Integer> union = new ArrayList<>();
+        
+        int ptr1 = 0;
+        int ptr2 = 0;
+        
+        while(ptr1 < arr1.length && ptr2 < arr2.length){
+            if(arr1[ptr1] < arr2[ptr2]){
+                if(union.size() == 0){
+                    union.add(arr1[ptr1]);
+                    
+                }else if(union.size() != 0){
+                    if(union.get(union.size()-1) != arr1[ptr1]){
+                        union.add(arr1[ptr1]);
+                    } 
+                }
+                ptr1++;
+            }
+            
+            else if(arr1[ptr1] >= arr2[ptr2]){
+                if(union.size() == 0){
+                    union.add(arr2[ptr2]);
+                    
+                }else if(union.size() != 0){
+                    if(union.get(union.size()-1) != arr2[ptr2]){
+                        union.add(arr2[ptr2]);
+                    }
+                }
+                ptr2++;
+            }
+        }
+        
+        while(ptr1 < arr1.length){
+            if(union.get(union.size()-1) != arr1[ptr1]){
+                union.add(arr1[ptr1]);
+            }
+            ptr1++;
+        }
+        
+        while(ptr2 < arr2.length){
+            if(union.get(union.size()-1) != arr2[ptr2]){
+                union.add(arr2[ptr2]);
+            }
+            ptr2++;
+        }
+        
+        return union;
+    }
+}
 ```
 
 ## Intersection of two Arrays (leetcode - 349)
@@ -385,6 +445,94 @@ class Solution {
 
         return intersection;
         
+    }
+}
+```
+
+## Missing Numbeer (leetcode - 268)
+
+```java
+class Solution {
+    public int missingNumber(int[] nums) {
+        int sum = 0;
+        sum = (nums.length *(nums.length + 1))/2;
+
+        int array_sum = 0;
+
+        for(int i = 0;i<nums.length;i++){
+            array_sum = array_sum + nums[i];
+        }
+
+        return sum - array_sum;
+    }
+}
+```
+
+## Max consecutive ones(leetcode - 485)
+
+```java
+class Solution {
+    public int findMaxConsecutiveOnes(int[] nums) {
+
+        int max_count = Integer.MIN_VALUE;
+
+        int current_count = 0;
+
+        int ptr = 0;
+
+        while(ptr < nums.length){
+            if(nums[ptr] == 1){
+                current_count ++;
+            }
+
+            if(nums[ptr] != 1){
+                max_count = Math.max(max_count , current_count);
+                current_count = 0;
+            }
+
+            ptr++;
+        }
+
+        return Math.max(max_count , current_count);
+    }
+}
+```
+
+## Single number (leetcode - 136)
+
+```java
+class Solution {
+    public int singleNumber(int[] nums) {
+        int number = nums[0];
+
+        for(int i = 1 ; i<nums.length;i++){
+            number = number ^ nums[i];
+        }
+        return number;
+    }
+}
+```
+
+## Two Sum (leetcode - 1)
+
+```java
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+
+        int[] arr = new int[2];
+
+        HashMap<Integer,Integer> map = new HashMap<>();
+
+        for(int i = 0;i<nums.length;i++){
+            if(map.containsKey(target - nums[i])){
+                arr[0] = i;
+                arr[1] = map.get(target - nums[i]);
+                return arr;
+            }
+
+            map.put(nums[i] , i);
+        }
+        return arr;
     }
 }
 ```
