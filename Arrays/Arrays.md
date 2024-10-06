@@ -1,3 +1,5 @@
+# One Dimensional arrays
+
 ## Finding largest element in an array
 
 ```java
@@ -537,6 +539,201 @@ class Solution {
 }
 ```
 
+## Sort Colors (leetcode - 75)
+
+```java
+class Solution {
+    public void sortColors(int[] nums) {
+        int low = 0;
+        int mid = 0;
+        int high = nums.length-1;
+
+        while(mid <= high){
+            if(nums[mid] == 0){
+                int temp = nums[mid];
+                nums[mid] = nums[low];
+                nums[low] = temp;
+                low++;
+                mid++;
+
+            }else if(nums[mid] == 1){
+                mid++;
+
+            }else if(nums[mid] == 2){
+                int temp = nums[mid];
+                nums[mid] = nums[high];
+                nums[high] = temp;
+                high--;
+            }
+        }
+    }
+}
+```
+
+## Majority Element (leetcode - 169)
+
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+
+        if(nums.length == 1){
+            return nums[0];
+        }
+
+        HashMap<Integer,Integer> map1 = new HashMap<>();
+
+        for(int i = 0;i<nums.length;i++){
+            if(map1.containsKey(nums[i])){
+                int occurance = map1.get(nums[i]);
+                if(map1.get(nums[i]) == (nums.length)/2){
+                    return nums[i];
+                }else{
+                    occurance += 1;
+                    map1.put(nums[i],occurance);
+                }
+            }
+            else{
+                map1.put(nums[i],1);
+            }
+        }
+
+        return 0;
+        
+    }
+}
+```
+
+## Maximum SubArray Sum (leetcode - 53) (Kadane's Algo)
+
+```java
+class Solution {
+    public int maxSubArray(int[] nums) {
+
+        int max_sum = Integer.MIN_VALUE;
+
+        int sum = 0;
+
+        for(int i = 0;i<nums.length;i++){
+            if(sum < 0){
+                sum = 0;
+            }
+
+            sum = sum + nums[i];
+
+            max_sum = Math.max(max_sum , sum);
+        }
+        return max_sum;
+    }
+}
+```
+
+## Rearrange Array Element by Sign (leetcode - 2149)
+
+```java
+class Solution {
+    public int[] rearrangeArray(int[] nums) {
+
+        int ptr1 = 0;
+        int ptr2 = 1;
+
+        int[] ans = new int[nums.length];
+
+        for(int i = 0;i<nums.length;i++){
+            if(nums[i] > 0){
+                ans[ptr1] = nums[i];
+                ptr1 += 2;
+
+            }else if(nums[i] < 0){
+                ans[ptr2] = nums[i];
+                ptr2 += 2;
+            }
+        }
+        return ans;
+    }
+}
+```
+
+## Next Permutation (leetcode - 31)
+
+```java
+class Solution {
+
+    public void reverse(int[] nums , int ptr1 , int ptr2){
+
+        while(ptr1 < ptr2){
+            int temp = nums[ptr1];
+            nums[ptr1] = nums[ptr2];
+            nums[ptr2] = temp;
+            ptr1++;
+            ptr2--;
+        }
+    }
+    public void nextPermutation(int[] nums) {
+
+        int break_point = -1;
+
+        int min = Integer.MAX_VALUE;
+        int min_index = -1;
+
+        for(int i = nums.length-2;i>=0;i--){
+            if(nums[i]<nums[i+1]){
+                break_point = i;
+                break;
+            }
+        }
+
+        if(break_point == -1){
+            reverse(nums , 0 , nums.length-1);
+        }else{
+            for(int i = nums.length-1;i>break_point;i--){
+                if(min > nums[i] && nums[i] > nums[break_point]){
+                    min = nums[i];
+                    min_index = i;
+                    System.out.println(min_index);
+                }
+            }
+
+            int temp = nums[break_point];
+            nums[break_point] = nums[min_index];
+            nums[min_index] = temp;
+
+            reverse(nums , break_point+1 , nums.length-1);
+        }
+    }
+}
+```
+
+## Longest Consecutive Sequence (leetcode - 128)
+
+```java
+class Solution {
+    public int longestConsecutive(int[] a) {
+        
+       int n = a.length;
+        if (n == 0)
+            return 0;
+
+        int longest = 1;
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            set.add(a[i]);
+        }
+        for (int it : set) {
+            if (!set.contains(it - 1)) {
+                int cnt = 1;
+                int x = it;
+                while (set.contains(x + 1)) {
+                    x = x + 1;
+                    cnt = cnt + 1;
+                }
+                longest = Math.max(longest, cnt);
+            }
+        }
+        return longest;
+    }
+}
+```
+
 ## Leaders in an array (gfg)
 
 ```java
@@ -606,4 +803,6 @@ class Solution {
     }
 }
 ```
+
+# Two Dimensional arrays
 
