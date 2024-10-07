@@ -1,4 +1,9 @@
 
+# Imp points to keep in Mind
+
+1. While solving any deletion question , update the pointers carefully.
+2. Keep practicing the reversal of singly and doubly linked lists.
+
 # Singly LinkedLists
 
 ## Array to LinkedList (gfg) (Easy)
@@ -409,6 +414,446 @@ public class Solution {
         }
 
         return null;
+        
+    }
+}
+```
+
+## Finding the middle of the linkedlist (leetcode - 876) (Easy)
+
+```java
+public ListNode middleNode(ListNode head) {
+
+    if(head == null){
+        return head;
+    }
+
+    ListNode slow = head;
+    ListNode fast = head;
+
+    while(fast != null && fast.next != null){
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+
+    return slow;
+}
+
+```
+
+## Delete the middle Node of a LinkedList (leetcode - 2095) (Medium)
+
+```java
+class Solution {
+    public ListNode deleteMiddle(ListNode head) {
+
+        if(head == null || head.next == null){
+            return null;
+        }
+
+        ListNode slow = head;
+        ListNode fast = head;
+        ListNode prev = null;
+
+        while(fast != null && fast.next != null){
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        prev.next = prev.next.next;
+        slow.next = null;
+
+        return head;
+    }
+}
+```
+
+## LinkedList Cycle (leetcode - 141) (Easy)
+
+```java
+public class Solution {
+    public boolean hasCycle(ListNode H) {
+        if(H == null || H.next == null){
+            return false;
+        }
+
+        ListNode slow = H;
+        ListNode fast = H;
+
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if(slow == fast){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+```
+
+## Find length of the loop (gfg) (Medium)
+
+```java
+class Solution {
+    // Function to find the length of a loop in the linked list.
+    public int countNodesinLoop(Node head) {
+        // Add your code here.
+        if(head == null || head.next == null){
+            return 0;
+        }
+        
+        Node slow = head;
+        Node fast = head;
+        
+        boolean flag = false;
+        
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+            
+            if(slow == fast){
+                flag = true;
+                break;
+            }
+        }
+        
+        if(flag == false){
+            return 0;
+        }else{
+            int ct = 1;
+            slow = slow.next;
+            while(slow != fast){
+                slow = slow.next;
+                ct += 1;
+            }
+            return ct;
+        }
+    }
+}
+```
+
+## LinkedList Cycle - II (Finding the length of the cycle) (leetcode 142) (Medium)
+
+```java
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if(head == null || head.next == null){
+            return null;
+        }
+
+        ListNode slow = head;
+        ListNode fast = head;
+
+        boolean flag = false;
+
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if(slow == fast){
+                flag = true;
+                break;
+            }
+        }
+
+        if(flag == true){
+            slow = head;
+            while(slow != fast){
+                slow = slow.next;
+                fast = fast.next;
+            }
+            return slow;
+        }else{
+            return null;
+        }
+        
+    }
+}
+```
+
+## Pallindrome LinkedList (leetcode - 234) (Easy)
+
+```java
+class Solution {
+    public ListNode reverse(ListNode head){
+        if(head == null || head.next == null){
+            return head;
+        }
+
+        ListNode prev = null;
+        ListNode curr = head;
+        ListNode next = null;
+
+        while(curr != null){
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        head = prev;
+        return head;
+
+    }
+    public boolean isPalindrome(ListNode head) {
+
+        if(head == null || head.next == null){
+            return true;
+        }
+
+        ListNode slow = head;
+        ListNode fast = head;
+        ListNode prev = null;
+
+        while(fast != null && fast.next != null){
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        if(fast == null){
+            prev.next = null;
+            ListNode ptr1 = head;
+            ListNode ptr2 = reverse(slow);
+
+            while(ptr1 != null && ptr2 != null){
+                if(ptr1.val != ptr2.val){
+                    return false;
+                }
+                ptr1 = ptr1.next;
+                ptr2 = ptr2.next;
+            }
+            return true;
+        }else{
+            prev.next = null;
+            ListNode ptr1 = head;
+            ListNode tty = slow.next;
+            slow.next = null;
+            ListNode ptr2 = reverse(tty);
+
+            while(ptr1 != null && ptr2 != null){
+                if(ptr1.val != ptr2.val){
+                    return false;
+                }
+                ptr1 = ptr1.next;
+                ptr2 = ptr2.next;
+            }
+
+            return true;
+        }
+    }
+}
+```
+
+## Reorder list (gfg) (hard)
+
+```java
+class Solution {
+    Node reverse(Node head){
+        if(head == null || head.next == null){
+            return head;
+        }
+        
+        Node prev = null;
+        Node curr = head;
+        Node next = null;
+        
+        while(curr != null){
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        
+        head = prev;
+        
+        return head;
+    }
+    void reorderlist(Node head) {
+        // Your code here
+        
+        if(head == null || head.next == null){
+            return;
+        }
+        
+        Node slow = head;
+        Node fast = head;
+        Node prev = null;
+        
+        while(fast != null && fast.next != null){
+            
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        if(fast == null){
+            
+            Node ptr1 = head;
+            prev.next = null;
+            Node ptr2 = reverse(slow);
+            
+            while(ptr1 != null && ptr2 != null){
+                Node ptr1_next = ptr1.next;
+                Node ptr2_next = ptr2.next;
+                
+                ptr1.next = ptr2;
+                ptr2.next = ptr1_next;
+                
+                ptr1 = ptr1_next;
+                ptr2 = ptr2_next;
+            }
+            
+        }else{
+            Node ptr1 = head;
+            Node slow_next = slow.next;
+            slow.next = null;
+            Node ptr2 = reverse(slow_next);
+            
+            while(ptr1 != null && ptr2 != null){
+                Node ptr1_next = ptr1.next;
+                Node ptr2_next = ptr2.next;
+                
+                ptr1.next = ptr2;
+                ptr2.next = ptr1_next;
+                
+                ptr1 = ptr1_next;
+                ptr2 = ptr2_next;
+            }   
+        }
+    }
+}
+```
+
+## Odd Even LinkedList  (leetcode 328) (Medium)
+
+```java
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+
+        if(head == null || head.next == null){
+            return head;
+        }
+
+        ListNode odd = head;
+        ListNode even = head.next;
+        ListNode evenNode = head.next;
+
+        while(even != null && even.next != null){
+            odd.next = odd.next.next;
+            even.next = even.next.next;
+
+            odd = odd.next;
+            even = even.next;
+        }
+
+        odd.next = evenNode;
+
+        return head;
+        
+    }
+}
+```
+
+## Sort a LL of 0's 1's and 2's by changing links (easy)
+
+1. Assumes that the linkedlist conntains atleast one of all the numbers (0,1,2);
+
+```java
+public class Solution
+{
+    public static Node sortList(Node head) {
+        // Write your code here
+
+         if(head == null || head.next == null){
+            return head;
+        }
+        
+        Node head_0 = new Node(-1);
+        Node head_1 = new Node(-1);
+        Node head_2 = new Node(-1);
+        
+        Node temp_0 = head_0;
+        Node temp_1 = head_1;
+        Node temp_2 = head_2;
+        
+        Node temp = head;
+
+        while(temp != null){
+            if(temp.data == 0){
+                temp_0.next = temp;
+                temp_0 = temp_0.next;
+                temp = temp.next;
+                
+            }else if(temp.data == 1){
+                temp_1.next = temp;
+                temp_1 = temp_1.next;
+                temp = temp.next;
+                
+            }else if(temp.data == 2){
+                temp_2.next = temp;
+                temp_2 = temp_2.next;
+                temp = temp.next;
+            }
+        }
+            
+        head = head_0.next;
+        temp_0.next = head_1.next;
+        temp_1.next = head_2.next;
+        temp_2.next = null;
+        
+        head_0 = null;
+        head_1 = null;
+        head_2 = null;
+        
+        return head;
+    }
+}
+```
+
+## Segregate even and odd nodes in a linked list (Medium) (gfg)
+
+```java
+class Solution {
+    Node divide(Node head) {
+        // code here
+        
+        if(head == null || head.next == null){
+            return head;
+        }
+        
+        Node head_even = new Node(-1);
+        Node head_odd = new Node(-1);
+        
+        Node temp_even = head_even;
+        Node temp_odd = head_odd;
+        
+        Node temp = head;
+        
+        while(temp != null){
+            if(temp.data % 2 == 0){
+                temp_even.next = temp;
+                temp_even = temp_even.next;
+                temp = temp.next;
+                
+            }else if(temp.data % 2 != 0){
+                temp_odd.next = temp;
+                temp_odd = temp_odd.next;
+                temp = temp.next;
+            }
+        }
+        
+        temp_odd.next = null;
+        temp_even.next = head_odd.next;
+        head = head_even.next;
+        
+        head_odd = null;
+        head_even = null;
+        
+        return head;
         
     }
 }

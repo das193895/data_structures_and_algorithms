@@ -1,6 +1,5 @@
-# Easy
 
-## Computing Fibonacci Series
+## Computing Fibonacci Series (Medium)
 
 ```java
 class Solution {
@@ -51,6 +50,195 @@ class Solution {
 }
 ```
 
+## Frog Jump (coding ninja) (easy)
+
+```java
+public class Solution {
+    public static int frogJump(int N, int arr[]) {
+
+        int[] dp = new int[N+1];
+        for(int i = 0;i<dp.length;i++){
+            dp[i] = -1;
+        }
+        
+        return helper(arr , N-1 , dp);
+
+    }
+
+    public static int helper(int arr[] , int idx , int[] dp){
+        if(idx == 0){
+            dp[idx] = 0;
+            return 0;
+        }
+        
+        if(dp[idx] != -1){
+            return dp[idx];
+        }
+        
+        int min = Integer.MAX_VALUE;
+        
+        int ans1 = Math.abs(arr[idx]-arr[idx-1])+helper(arr , idx -1 , dp);
+        
+        int ans2 = Integer.MAX_VALUE;
+        
+        if(idx != 1){
+            ans2 = Math.abs(arr[idx]-arr[idx-2])+helper(arr , idx - 2,dp);
+        }
+        
+        int ans = Math.min(ans1,ans2);
+        
+        dp[idx] = ans;
+        
+        return ans;
+    }
+}
+```
+
+## Frog Jump with K distances (Coding ninja) (Medium)
+
+```java
+public class Solution {
+    public static int minimizeCost(int n , int k, int arr[]) {
+        // code here
+        
+        int[] dp = new int[n+1];
+        
+        for(int i = 0;i<dp.length;i++){
+            dp[i] = -1;
+        }
+        
+        return helper(n-1 , k , arr , dp);
+    }
+    
+    public static int helper(int idx , int k , int[] arr , int[] dp){
+        if(idx == 0){
+            dp[idx] = 0;
+            return 0;
+        }
+        
+        if(dp[idx] != -1){
+            return dp[idx];
+        }
+        
+        int ans = Integer.MAX_VALUE;
+        
+        for(int i = 1;i<=k;i++){
+            if(idx-i >= 0){
+                ans = Math.min(ans , Math.abs(arr[idx]-arr[idx-i])+helper(idx-i,k,arr,dp));
+            }
+        }
+        
+        dp[idx] = ans;
+        
+        return ans;
+    }
+}
+```
+
+## House Robber (leetcode - 198) (Medium)
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+
+        ArrayList<Integer> dp = new ArrayList<>(Collections.nCopies(nums.length,-1));
+
+        return helper(nums , nums.length - 1 , dp);  
+    }
+
+    public int helper(int[] nums , int i , ArrayList<Integer> dp){
+        if(i == 0){
+            dp.set(0,nums[i]);
+            return nums[i];
+        }
+
+        if(i < 0){
+            return 0;
+        }
+
+        if(dp.get(i) != -1){
+            return dp.get(i);
+        }
+
+        int take = helper(nums , i-2 ,dp) + nums[i];
+        int no_take = helper(nums , i-1 ,dp);
+        
+        int ans = Math.max(take , no_take);
+        dp.set(i , ans);
+        return ans;
+
+    }
+}
+```
+
+## House Robber - II (leetcode - 213) (Medium)
+
+```java
+class Solution {
+     public int rob(int[] nums) {
+
+        if(nums.length == 1){
+            return nums[0];
+        }
+
+        ArrayList<Integer> dp1 = new ArrayList<>(Collections.nCopies(nums.length,-1));
+        ArrayList<Integer> dp2 = new ArrayList<>(Collections.nCopies(nums.length,-1));
+
+        int ans1 = helper_1(nums , nums.length - 1 , dp1);
+
+        int ans2 = helper_2(nums , nums.length - 2 , dp2);
+
+        return Math.max(ans1,ans2);  
+    }
+
+    public int helper_1(int[] nums , int i , ArrayList<Integer> dp){
+        if(i == 1){
+            dp.set(1,nums[i]);
+            return nums[i];
+        }
+
+        if(i <= 0){
+            return 0;
+        }
+
+        if(dp.get(i) != -1){
+            return dp.get(i);
+        }
+
+        int take = helper_1(nums , i-2 ,dp) + nums[i];
+        int no_take = helper_1(nums , i-1 ,dp);
+        
+        int ans = Math.max(take , no_take);
+        dp.set(i , ans);
+        return ans;
+
+    }
+
+    public int helper_2(int[] nums , int i , ArrayList<Integer> dp){
+        if(i == 0){
+            dp.set(1,nums[i]);
+            return nums[i];
+        }
+
+        if(i < 0){
+            return 0;
+        }
+
+        if(dp.get(i) != -1){
+            return dp.get(i);
+        }
+
+        int take = helper_2(nums , i-2 ,dp) + nums[i];
+        int no_take = helper_2(nums , i-1 ,dp);
+        
+        int ans = Math.max(take , no_take);
+        dp.set(i , ans);
+        return ans;
+
+    }
+}
+```
+
 ## Climbing stairs (leetcode - 70)
 
 ```java
@@ -78,8 +266,6 @@ class Solution {
 }
 ```
 
-
-# Medium 
 
 ## 0 - 1 Knapsack problem (gfg)
 
