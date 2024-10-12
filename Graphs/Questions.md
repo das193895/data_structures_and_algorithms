@@ -1,4 +1,10 @@
 
+# Questions Count 
+
+1. Easy - 4
+2. Medium - 7
+3. Hard - 
+
 degree of a node is the number of edges that are connected to that node . And in a graph total degree = 2 * no_odf_edges
 directed graph -- indegree and out degree are there
 
@@ -6,9 +12,48 @@ Storing the graph -- Adjacency list(O(2M)) and Adjacency matrix(O(NM)) N is the 
 
 For storing weights in weighted graphs , store weight values in the adjacency matrix between 2 corresponding nodes and in Adjacency lists , store pairs of corresponding node and the weights associated with the edge that is connecting the 2 nodes.
 
+# Basic Problems
+
+## Graph & Vertices (gfg) (easy)
+
+Given an integer n representing number of vertices. Find out how many undirected graphs (not necessarily connected) can be constructed out of a given n number of vertices. -- 2 ^ (n(n-1)/2)
+
+```java
+class Solution {
+    static long count(int n) {
+    
+    long power = (n*(n-1))/2;
+    
+    return (long) Math.pow(2,power);
+  }
+}
+```
+
+## Print Adjacency List (gfg) (easy)
+
+```java
+class Solution {
+    public List<List<Integer>> printGraph(int v, int edges[][]) {
+        List<List<Integer>> adj = new ArrayList<>();
+        
+        for (int i = 0; i < v; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < edges.length; i++) {
+            int u = edges[i][0];
+            int w = edges[i][1];
+            adj.get(u).add(w);
+            adj.get(w).add(u);
+        }
+        return adj;
+    }
+}
+```
+
 # BFS & DFS 
 
-## BFS 
+## BFS (gfg) (easy)
 time complexity -- O(V+E)
 ```java
 class Solution {
@@ -29,7 +74,7 @@ class Solution {
             
             for(int i = 0;i<adj.get(element).size();i++){
                 if(visited[adj.get(element).get(i)] == false){
-                    visited[adj.get(element).get(i)] = true;
+                    visited[adj.get(element).get(i)] = true;       // Important
                     q.add(adj.get(element).get(i));
                 }
             }
@@ -39,7 +84,7 @@ class Solution {
 }
 ```
 
-# DFS 
+# DFS  (gfg) (easy)
 time complexity -- O(V+E)
 ```java
 class Solution {
@@ -60,7 +105,7 @@ class Solution {
         
         for(int i = 0;i<adj.get(node).size();i++){
             if(visited[adj.get(node).get(i)] == false){
-                dfs(v , adj , visited , result , adj.get(node).get(i));
+                dfs(v , adj , visited , result , adj.get(node).get(i));   // Important
             }
         }
         
@@ -99,8 +144,114 @@ class Solution {
 
         for(int i = 0;i<isConnected[node].length;i++){
             if(isConnected[node][i] == 1){
-                if(visited[i] == false){
+                if(visited[i] == false){                            // Important
                     dfs(i , isConnected , visited);
+                }
+            }
+        }
+    }
+}
+```
+
+## Number of islands (leetcode - 200) (Medium)
+
+```java
+
+// With dfs and considering neighbours horizontally and vertically (4 directions)
+class Solution {
+    public int numIslands(char[][] grid) {
+
+        boolean[][] visited = new boolean[grid.length][grid[0].length];
+
+        int count = 0;
+
+        for(int i = 0;i<visited.length;i++){
+            for(int j = 0;j<visited[0].length;j++){
+                if(visited[i][j] == false && grid[i][j] == '1'){    // Important
+                    dfs(i , j ,grid , visited);
+                    count++;
+                }
+            }
+        }
+
+        return count;  
+    }
+
+    public void dfs(int idx1 , int idx2 ,char[][] grid , boolean[][] visited){
+        visited[idx1][idx2] = true;
+
+        for(int di = -1 ; di<= 1 ;di++){
+            for(int dj = -1 ; dj <= 1 ; dj ++){
+                int row = idx1+di;
+                int col = idx2 + dj;
+                if(row < 0 || row >= grid.length || col < 0 || col >= grid[0].length){      // Important
+                    continue;
+                }
+
+                if(row == idx1 || col == idx2){       // Important
+                     if(grid[row][col] == '1'){
+                        if(visited[row][col] == false){
+                            dfs(row , col , grid , visited);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// With bfs and considering neighbours horizontally and vertically as well as diagonally (8 directions)
+
+class Solution {
+    public int numIslands(char[][] grid) {
+        // Code here
+        
+        int r = grid.length;
+        int c = grid[0].length;
+        
+        boolean[][] visited = new boolean[r][c];
+        
+        int count = 0;
+        
+        for(int i = 0;i<r;i++){
+            for(int j = 0;j<c;j++){
+                if(visited[i][j] == false && grid[i][j] == '1') {
+                    bfs(i,j,grid,visited);
+                    count++;
+                }
+            }
+        }
+        
+        return count;
+    }
+    
+    public void bfs(int idx1 , int idx2 , char[][] grid , boolean[][] visited){
+        Queue<int[]> q = new LinkedList<>();
+        
+        int[] arr ={idx1 , idx2};
+        
+        q.add(arr);
+        
+        while(!q.isEmpty()){
+            
+            int[] arr3 = q.poll();
+            int i1 = arr3[0];
+            int i2 = arr3[1];
+            
+            for(int i = -1 ; i <= 1;i++){
+                for(int j = -1 ; j <= 1 ; j++){
+                    int row = i1 + i;
+                    int col = i2 + j;
+                    if(row < 0 || row >= grid.length || col < 0 || col >= grid[0].length){
+                        continue;
+                    }
+                    if(grid[row][col] == '1'){
+                        if(visited[row][col] == false){
+                            visited[row][col] = true;
+                            int[] arr2 = {row,col};
+                            q.add(arr2);
+                        }
+                    }
                 }
             }
         }
@@ -146,81 +297,267 @@ class Solution
                 }
             }
         }
-        
     }
 }
 ```
 
 ## Rotten oranges (leetcode -- 994) (Medium)
 
+BFS can only be applied
+
+```java
+class Solution
+{
+    //Function to find minimum time required to rot all oranges. 
+    public int orangesRotting(int[][] grid)
+    {
+        // Code here
+        
+        int[][] newGrid = grid;
+        
+        Queue<int[]> q = new LinkedList<>();
+        
+        boolean[][] visited = new boolean[grid.length][grid[0].length];
+        
+        for(int i = 0;i<newGrid.length;i++){
+            for(int j = 0;j<newGrid[0].length;j++){
+                if(grid[i][j] == 2 && visited[i][j] == false){
+                    visited[i][j] = true;
+                    int[] arr = {i , j , 0};
+                    q.add(arr);
+                }
+            }
+        }
+        
+        int final_time = 0;
+        
+        while(!q.isEmpty()){
+            int[] arr = q.poll();
+            
+            int idx1 = arr[0];
+            int idx2 = arr[1];
+            int time = arr[2];
+            
+            for(int i = -1 ; i<=1;i++){
+                for(int j = -1 ; j<= 1;j++){
+                    int row = idx1+i;
+                    int col = idx2+j;
+                    
+                    if(row < 0 || row >= grid.length || col < 0 || col >= grid[0].length){
+                        continue;
+                    }
+                    
+                    if(row == idx1 || col == idx2){
+                        if(visited[row][col] == false && newGrid[row][col] == 1){
+                            visited[row][col] = true;
+                            newGrid[row][col] = 2;
+                            int curr_time = time + 1;
+                            final_time = curr_time;
+                            int[] arr1 = {row , col , curr_time};
+                            q.add(arr1);
+                        }
+                    }
+                }
+            }
+        }
+        
+        for(int i = 0 ;i<newGrid.length;i++){
+            for(int j = 0;j<newGrid[0].length;j++){
+                if(newGrid[i][j] == 1){
+                    return -1;
+                }
+            }
+        }
+        
+        return final_time;
+    }
+}
+```
+
+## Detect Cycle in undirected graph (gfg) (Medium)
+
 ```java
 class Solution {
-    class Pair{
-        int idx1;
-        int idx2;
-        int time;
-        Pair(int i1 , int i2 , int t){
-            this.idx1 = i1;
-            this.idx2 = i2;
-            this.time = t;
+    // Function to detect cycle in an undirected graph.
+    
+    public class Pair{
+        int node;
+        int parent;
+        public Pair(int node , int parent){
+            this.node = node;
+            this.parent = parent;
         }
     }
-    public int orangesRotting(int[][] grid) {
-
-        int[][] newGrid = grid;
-
-        boolean[][] visited = new boolean[grid.length][grid[0].length];
-
+    public boolean isCycle(int v, ArrayList<ArrayList<Integer>> adj) {
+        // Code here
+        boolean[] visited = new boolean[v];
+        
+        for(int i = 0;i<visited.length;i++){
+            visited[i] = false;
+        }
+        
+        for(int i = 0;i<visited.length;i++){
+            if(visited[i] == false){
+                if(bfs(v , adj , visited , i , -1) == true){
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    public Boolean bfs(int v , ArrayList<ArrayList<Integer>> adj , boolean[] visited , int node , int parent){
         Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(node , parent));
+        visited[node] = true;
+        
+        while(!q.isEmpty()){
+            Pair n = q.poll();
+            
+            int newNode = n.node;
+            int newParent = n.parent;
+            
+            for(int i = 0;i<adj.get(newNode).size();i++){
+                int neighbors = adj.get(newNode).get(i);
+                if(visited[neighbors] == true & neighbors == newParent){
+                    continue;
+                }
+                else if(visited[neighbors] == true & neighbors != newParent){
+                    return true;
+                }
+                else if(visited[neighbors] == false){
+                    visited[neighbors] = true;
+                    q.add(new Pair(neighbors , newNode));
+                }
+            }
+        }
+        return false;
+    } 
+}
+```
 
-        for(int i = 0;i<grid.length;i++){
-            for(int j = 0;j<grid[0].length;j++){
-                if(grid[i][j] == 2){
+## Distence of nearest cell Having 1 (gfg) (Medium)
+
+BFS can only be applied
+
+```java
+class Solution
+{
+    //Function to find distance of nearest 1 in the grid for each cell.
+    public int[][] nearest(int[][] grid)
+    {
+        // Code here
+        
+        int[][] newGrid = grid;
+        
+        boolean[][] visited = new boolean[grid.length][grid[0].length];
+        
+        Queue<int[]> q = new LinkedList<>();
+        
+        for(int i = 0;i<newGrid.length;i++){
+            for(int j = 0;j<newGrid[0].length;j++){
+                if(newGrid[i][j] == 1){
                     visited[i][j] = true;
-                    newGrid[i][j] = 2;
-                    q.add(new Pair(i , j , 0));
+                    newGrid[i][j] = 0;
+                    int[] arr = {i , j , 0};
+                    q.add(arr);
+                }
+            }
+        }
+        
+        while(!q.isEmpty()){
+            int[] arr = q.poll();
+            
+            int idx1 = arr[0];
+            int idx2 = arr[1];
+            int distance = arr[2];
+            
+            // newGrid[idx1][idx2] = distance;
+            
+            for(int i = -1 ; i <= 1 ; i++){
+                for(int j = -1 ; j <= 1 ; j++){
+                    int row = idx1+i;
+                    int col = idx2+j;
+                    if(row < 0 || row >= grid.length || col < 0 || col >= grid[0].length){
+                        continue;
+                    }
+                    
+                    if(row == idx1 || col == idx2){
+                        if(visited[row][col] == false){     // do not use grid[idx1][idx2] == 0 && visited[row][col] == false;
+                            int curr_dist = distance + 1;   // Important to declare a new variable and not use (distance = distance + 1)
+                            newGrid[row][col] = curr_dist;
+                            visited[row][col] = true;
+                            int[] arr1 = {row , col , curr_dist};
+                            q.add(arr1);
+                        }
+                    }
+                }
+            }
+        }
+        return newGrid;
+    }
+}
+```
+
+## 0/1 matrix (leetcode - 542) (medium)
+
+Just same as the above problem with a slight variation 
+
+```java
+
+class Solution {
+    public int[][] updateMatrix(int[][] mat) {
+
+        int[][] distance = mat;
+        boolean[][] visited = new boolean[mat.length][mat[0].length];
+
+        Queue<int[]> q = new LinkedList<>();
+
+        for(int i = 0;i<mat.length;i++){
+            for(int j = 0;j<mat[0].length;j++){
+                if(mat[i][j] == 0){
+                    distance[i][j] = 0;
+                    visited[i][j] = true;
+                    int[] arr = {i , j , 0};
+                    q.add(arr);
                 }
             }
         }
 
-        int finalTime = 0;
-
         while(!q.isEmpty()){
-            Pair pair = q.poll();
+            int[] arr = q.poll();
 
-            for(int i = -1;i<=1;i++){
-                for(int j = -1 ;j<=1;j++){
-                    int row = pair.idx1 + i;
-                    int col = pair.idx2 + j;
+            int idx1 = arr[0];
+            int idx2 = arr[1];
+            int dist = arr[2];
 
-                    if(row != pair.idx1 && col != pair.idx2){
+            for(int i = -1 ; i <= 1 ; i++){
+                for(int j = -1 ; j <= 1 ; j++){
+                    int row = idx1 + i;
+                    int col = idx2 + j;
+
+
+                    if(row < 0 || row >= mat.length || col < 0 || col >= mat[0].length){
                         continue;
                     }
 
-                    if(row >= 0 && col >= 0 && row < grid.length && col < grid[0].length && !visited[row][col] && newGrid[row][col] == 1){
-                        visited[row][col] = true;
-                        newGrid[row][col] = 2;
-                        int currt = pair.time + 1;
-                        finalTime = currt;
-                        q.add(new Pair(row , col , currt));
+                    if(row == idx1 || col == idx2){
+                        if(!visited[row][col]){
+                            visited[row][col] = true;
+                            int current_distance = dist + 1;
+                            distance[row][col] = current_distance;
+                            int[] arr1 = {row , col , current_distance};
+                            q.add(arr1);
+                        }
                     }
                 }
             }
         }
-
-        for(int i = 0;i<grid.length;i++){
-            for(int j = 0;j<grid[0].length;j++){
-                if(grid[i][j] == 1){
-                    if(newGrid[i][j] != 2){
-                        return -1;
-                    }
-                }
-            }
-        }
-
-        return finalTime;
+        return distance;
     }
 }
+
 ```
 
 ## Is Graph Biparatite (leetcode -- 785) (Medium)
@@ -285,71 +622,6 @@ class Solution{
         }
         return true;
     }
-}
-```
-
-## Detect Cycle in undirected graph (gfg) (Medium)
-
-```java
-class Solution {
-    // Function to detect cycle in an undirected graph.
-    
-    public class Pair{
-        int node;
-        int parent;
-        public Pair(int node , int parent){
-            this.node = node;
-            this.parent = parent;
-        }
-    }
-    public boolean isCycle(int v, ArrayList<ArrayList<Integer>> adj) {
-        // Code here
-        boolean[] visited = new boolean[v];
-        
-        for(int i = 0;i<visited.length;i++){
-            visited[i] = false;
-        }
-        
-        for(int i = 0;i<visited.length;i++){
-            if(visited[i] == false){
-                if(bfs(v , adj , visited , i , -1) == true){
-                    return true;
-                }
-            }
-        }
-        
-        return false;
-    }
-    
-    public Boolean bfs(int v , ArrayList<ArrayList<Integer>> adj , boolean[] visited , int node , int parent){
-        Queue<Pair> q = new LinkedList<>();
-        q.add(new Pair(node , parent));
-        visited[node] = true;
-        
-        while(!q.isEmpty()){
-            Pair n = q.poll();
-            
-            int newNode = n.node;
-            int newParent = n.parent;
-            
-            for(int i = 0;i<adj.get(newNode).size();i++){
-                int neighbors = adj.get(newNode).get(i);
-                if(visited[neighbors] == true & neighbors == newParent){
-                    continue;
-                }
-                else if(visited[neighbors] == true & neighbors != newParent){
-                    return true;
-                }
-                else if(visited[neighbors] == false){
-                    visited[neighbors] = true;
-                    q.add(new Pair(neighbors , newNode));
-                }
-            }
-            
-        }
-        
-        return false;
-    } 
 }
 ```
 
