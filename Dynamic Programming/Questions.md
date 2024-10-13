@@ -1,5 +1,11 @@
 
-## Computing Fibonacci Series (Medium)
+# Questions Count
+
+1. Easy - 2
+2. Medium - 4
+3. Hard - 
+
+## Computing Fibonacci Series (Easy)
 
 ```java
 class Solution {

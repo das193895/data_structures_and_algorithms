@@ -1,4 +1,4 @@
-# Level -- Easy
+
 
 ## Inorder traversal
 
@@ -190,11 +190,6 @@ class Solution{
 
 }
 ```
-
-
-
-
-## Level -- Medium
 
 ## Lowest Common Ancestor Of 2 nodes in a binary tree (leetcode -- 236 & gfg)
 

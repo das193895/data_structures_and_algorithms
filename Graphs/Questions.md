@@ -2,7 +2,7 @@
 # Questions Count 
 
 1. Easy - 4
-2. Medium - 7
+2. Medium - 9
 3. Hard - 
 
 degree of a node is the number of edges that are connected to that node . And in a graph total degree = 2 * no_odf_edges
@@ -558,6 +558,141 @@ class Solution {
     }
 }
 
+```
+
+## Surrounded Regions (leetcode - 130) (Medium)
+
+```java
+class Solution {
+    public void solve(char[][] board) {
+
+        boolean[][] visited = new boolean[board.length][board[0].length];
+
+        Queue<int[]> q = new LinkedList<>();
+
+        for(int i = 0; i < board.length;i++){
+            for(int j = 0 ; j < board[0].length;j++){
+                if(i == 0 || j == 0 || i == board.length - 1 || j == board[0].length-1){
+                    if(board[i][j] == 'O'){
+                        visited[i][j] = true;
+                        int[] arr = {i,j};
+                        q.add(arr);
+                    }
+                }
+            }
+        }
+
+        while(!q.isEmpty()){
+            int[] arr = q.poll();
+
+            int idx1 = arr[0];
+            int idx2 = arr[1];
+
+            for(int i = -1 ; i <= 1 ; i ++){
+                for(int j = -1 ; j <= 1 ; j++){
+                    int row = idx1 + i;
+                    int col = idx2 + j;
+
+                    if(row < 0 || row >= board.length || col < 0 || col >= board[0].length){
+                        continue;
+                    }
+
+                    if(row == idx1 || col == idx2){
+                        if(board[row][col] == 'O'){
+                            if(visited[row][col] == false){
+                                visited[row][col] = true;
+                                int[] arr1 = {row , col};
+                                q.add(arr1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        for(int i = 0 ; i < visited.length ; i++){
+            for(int j = 0 ; j < visited[0].length; j++){
+                if(visited[i][j] == false && board[i][j] == 'O'){
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+}
+```
+
+## Number Of Enclaves (gfg) (Medium)
+
+Similar to previous
+
+```java
+class Solution {
+
+    int numberOfEnclaves(int[][] grid) {
+
+        // Your code here
+        
+        boolean visited[][] = new boolean[grid.length][grid[0].length];
+        
+        Queue<int[]> q = new LinkedList<>();
+        
+        for(int i = 0; i < grid.length;i++){
+            for(int j = 0 ; j < grid[0].length;j++){
+                if(i == 0 || j == 0 || i == grid.length -1 || j == grid[0].length-1){
+                    if(grid[i][j] == 1){
+                        visited[i][j] = true;
+                        int[] arr = {i, j};
+                        q.add(arr);
+                    }
+                }
+            }
+        }
+        
+        while(!q.isEmpty()){
+            int[] arr = q.poll();
+            
+            int idx1 = arr[0];
+            int idx2 = arr[1];
+            
+            for(int i = -1;i<=1;i++){
+                for(int j = -1;j<=1;j++){
+                    
+                    int row = idx1 + i;
+                    int col = idx2 + j;
+                    
+                    if(row < 0 || row >= grid.length || col < 0 || col >= grid[0].length){
+                        continue;
+                    }
+                    
+                    if(row == idx1 || col == idx2){
+                        if(grid[row][col] == 1){
+                            if(visited[row][col] == false){
+                                visited[row][col] = true;
+                                int[] arr1 = {row , col};
+                                q.add(arr1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        int count = 0;
+        
+        
+        for(int i = 0;i<grid.length;i++){
+            for(int j = 0 ; j < grid[0].length;j++){
+                
+                if(visited[i][j] == false && grid[i][j] == 1){
+                    count++;
+                }
+            }
+        }
+        
+        return count;
+    }
+}
 ```
 
 ## Is Graph Biparatite (leetcode -- 785) (Medium)
