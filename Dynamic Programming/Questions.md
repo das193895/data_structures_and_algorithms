@@ -1,9 +1,9 @@
 
 # Questions Count
 
-1. Easy - 2
-2. Medium - 4
-3. Hard - 
+1. Easy - 3
+2. Medium - 11
+3. Hard - 4
 
 ## Computing Fibonacci Series (Easy)
 
@@ -273,7 +273,7 @@ class Solution {
 ```
 
 
-## 0 - 1 Knapsack problem (gfg)
+<!-- ## 0 - 1 Knapsack problem (gfg)
 
 ```java
 class Solution {
@@ -384,7 +384,7 @@ class Solution {
         return ans;
     }
 }
-```
+``` -->
 
 # DP On Strings
 
@@ -519,23 +519,303 @@ class Solution {
             }
         }
         
-        // reverse the stringBuilder sb
+        return sb.reverse().toString();
         
+    }
+```
+
+## Longest Common Substring (gfg) (Medium)
+
+```java
+class Solution {
+    public int longestCommonSubstr(String str1, String str2) {
+        // code here
+        
+        int n = str1.length();
+        int m = str2.length();
+        
+        int[][] dp = new int[n+1][m+1];
+        
+        for(int j = 0 ; j < dp[0].length;j++){
+            dp[0][j] = 0;
+        }
+        
+        for(int i = 0;i<dp.length;i++){
+            dp[i][0] = 0;
+        }
+        
+        int max = Integer.MIN_VALUE;
+        
+        for(int i = 1;i < dp.length;i++){
+            for(int j = 1;j < dp[0].length;j++){
+                if(str1.charAt(i-1) == str2.charAt(j-1)){
+                    dp[i][j] = dp[i-1][j-1] + 1;
+                    max = Math.max(max , dp[i][j]);
+                }else{
+                    dp[i][j] = 0;
+                }
+            }
+        }
+        
+        if(max == Integer.MIN_VALUE){
+            return 0;
+        }
+        
+        return max;
+    }
+}
+```
+
+## Longest Pallindromic Subsequence (leetcode - 516) (Medium)
+
+```java
+class Solution {
+
+    public String reverse(String s){
         int ptr1 = 0;
-        int ptr2 = sb.length()-1;
-        
+        int ptr2 = s.length()-1;
+
+        char[] s_arr = s.toCharArray();
+
         while(ptr1 <= ptr2){
-            char temp = sb.charAt(ptr1);
-            sb.setCharAt(ptr1 , sb.charAt(ptr2));
-            sb.setCharAt(ptr2 , temp);
-            
+            char temp = s_arr[ptr2];
+            s_arr[ptr2] = s_arr[ptr1];
+            s_arr[ptr1] = temp;
+
             ptr1++;
             ptr2--;
         }
-        
-        return sb.toString();
+
+        return new String(s_arr);
+    }
+    public int longestPalindromeSubseq(String s) {
+
+        String str1 = s;
+        String str2 = reverse(s);
+
+        return longestCommonSubsequence(str1 , str2);
         
     }
+
+    public int longestCommonSubsequence(String str1 , String str2){
+
+        int n = str1.length();
+        int m = str2.length();
+
+        int[][] dp = new int[n+1][m+1];
+
+        for(int j = 0;j<dp[0].length;j++){
+            dp[0][j] = 0;
+        }
+
+        for(int i = 0;i<dp.length;i++){
+            dp[i][0] = 0;
+        }
+
+        for(int i = 1;i<dp.length;i++){
+            for(int j = 1;j<dp[0].length;j++){
+                if(str1.charAt(i-1) == str2.charAt(j-1)){
+                    dp[i][j] = dp[i-1][j-1] + 1;
+                }else{
+                    dp[i][j] = Math.max(dp[i-1][j] , dp[i][j-1]);
+                }
+            }
+        }
+
+        return dp[n][m];
+    }
+}
+```
+
+## Minimum insertion steps to make a String Pallindrome (leetcode - 1312) (Hard)
+
+```java
+class Solution {
+
+    public String reverse(String s){
+        int ptr1 = 0;
+        int ptr2 = s.length()-1;
+
+        char[] s_arr = s.toCharArray();
+
+        while(ptr1 <= ptr2){
+            char temp = s_arr[ptr1];
+            s_arr[ptr1] = s_arr[ptr2];
+            s_arr[ptr2] = temp;
+            ptr1++;
+            ptr2--;
+        }
+        return new String(s_arr);
+    }
+    public int minInsertions(String s) {
+
+        int lps_length = lps(s);
+
+        return s.length() - lps_length;
+    }
+
+    public int lps(String s){
+
+        String str1 = s;
+        String str2 = reverse(s);
+
+        return lcs(str1 , str2);
+    }
+
+    public int lcs(String str1 , String str2){
+        int n = str1.length();
+        int m = str2.length();
+
+        int[][] dp = new int[n+1][m+1];
+
+        for(int i = 0 ; i < dp.length;i++){
+            dp[i][0] = 0;
+        }
+
+        for(int j = 0;j < dp[0].length;j++){
+            dp[0][j] = 0;
+        }
+
+        for(int i = 1;i<dp.length;i++){
+            for(int j = 1;j<dp[0].length;j++){
+                if(str1.charAt(i-1) == str2.charAt(j-1)){
+                    dp[i][j] = dp[i-1][j-1] + 1;
+                }else{
+                    dp[i][j] = Math.max(dp[i-1][j] , dp[i][j-1]);
+                }
+            }
+        }
+
+        return dp[n][m];
+    }
+}
+```
+
+## Delete operations for two Strings (leetcode - 583) (Medium)
+
+OR 
+
+Minimum number of insertions or deletions required to convert a string to another
+
+```java
+class Solution {
+    public int minDistance(String word1, String word2) {
+
+        int longestCommonSubsequence = lcs(word1,word2);
+
+        int deletions1 = word1.length() - longestCommonSubsequence;
+
+        int deletions2 = word2.length() - longestCommonSubsequence;
+
+        return deletions1 + deletions2;
+        
+    }
+
+    public int lcs(String str1 , String str2){
+        int n = str1.length();
+        int m = str2.length();
+
+        int[][] dp = new int[n+1][m+1];
+
+        for(int i = 0 ; i < dp.length;i++){
+            dp[i][0] = 0;
+        }
+
+        for(int j = 0;j < dp[0].length;j++){
+            dp[0][j] = 0;
+        }
+
+        for(int i = 1;i<dp.length;i++){
+            for(int j = 1;j<dp[0].length;j++){
+                if(str1.charAt(i-1) == str2.charAt(j-1)){
+                    dp[i][j] = dp[i-1][j-1] + 1;
+                }else{
+                    dp[i][j] = Math.max(dp[i-1][j] , dp[i][j-1]);
+                }
+            }
+        }
+
+        return dp[n][m];
+    }
+}
+```
+
+## Shortest Common Supersequence (leetcode - 1092) (Hard)
+
+Length of the shortest common supersequence is { length(lcs) + length(str1) - length(lcs) + length(str2) - length(lcs) } finally {length(str1) + length(str2) - length(lcs)} 
+
+```java
+class Solution {
+    public String shortestCommonSupersequence(String str1, String str2) {
+
+        int[][] lcs_matrix = lcs(str1, str2);
+        return scs(lcs_matrix,str1,str2);
+        
+    }
+
+    public String scs(int[][] lcs_matrix,String str1,String str2){
+        int i = lcs_matrix.length-1;
+        int j = lcs_matrix[0].length-1;
+
+        StringBuilder sb = new StringBuilder();
+
+        while(i > 0 && j > 0){
+
+            if(str1.charAt(i-1) == str2.charAt(j-1)){
+                sb.append(str1.charAt(i-1));
+                i--;
+                j--;
+            }else{
+                if(lcs_matrix[i-1][j] >= lcs_matrix[i][j-1]){
+                    sb.append(str1.charAt(i-1));
+                    i--;
+                }else{
+                    sb.append(str2.charAt(j-1));
+                    j--;
+                }
+            }
+
+        } 
+
+        while(i>0){
+            sb.append(str1.charAt(i-1));
+            i--;
+        }
+        while(j>0){
+            sb.append(str2.charAt(j-1));
+            j--;
+        }
+
+        return sb.reverse().toString();
+
+    }
+
+    public int[][] lcs(String str1 , String str2){
+        int n = str1.length();
+        int m = str2.length();
+        int[][] dp = new int[n+1][m+1];
+
+        for(int j = 0;j<dp[0].length;j++){
+            dp[0][j] = 0;
+        }
+
+        for(int i = 0;i<dp.length;i++){
+            dp[i][0] = 0;
+        }
+
+        for(int i = 1;i<dp.length;i++){
+            for(int j = 1;j<dp[0].length;j++){
+                if(str1.charAt(i-1) == str2.charAt(j-1)){
+                    dp[i][j] = dp[i-1][j-1] + 1;
+                }else{
+                    dp[i][j] = Math.max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+
+        return dp;
+    }
+}
 ```
 
 
@@ -547,23 +827,20 @@ If you are selling the stock in i-th day then you would have bought the stock in
 
 ```java
 class Solution {
-    public int maxProfit(int[] prices) {
-
-        int minimum = prices[0];
-
-        int profit = Integer.MIN_VALUE;
-
-        for(int i = 1 ; i< prices.length ;i++){
-            int current_profit = prices[i] - minimum;
-            if(current_profit > 0){
-                profit = Math.max(profit , current_profit);
-            }
-            minimum = Math.min(minimum , prices[i]);
+    public int maximumProfit(int prices[]) {
+        // Code here
+        
+        int min = prices[0];
+        int profit = 0; 
+        
+        for(int i = 1 ; i < prices.length;i++){
+            int current_profit = prices[i] - min;
+            
+            profit = Math.max(profit , current_profit);
+            
+            min = Math.min(min, prices[i]);
         }
-        if(profit == Integer.MIN_VALUE){
-            return 0;
-        }
-
+        
         return profit;
     }
 }

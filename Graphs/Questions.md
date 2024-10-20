@@ -2,7 +2,7 @@
 # Questions Count 
 
 1. Easy - 4
-2. Medium - 9
+2. Medium - 16
 3. Hard - 
 
 degree of a node is the number of edges that are connected to that node . And in a graph total degree = 2 * no_odf_edges
@@ -808,7 +808,67 @@ class Solution {
 }
 ```
 
-## Topological Sort (gfg) (Medium)
+# Topological Sort & Problems
+
+
+## Topological Sort (gfg) (Medium) (With BFS / Kahn's Algo)
+
+```java
+class Solution
+{
+    //Function to return list containing vertices in Topological order. 
+    static int[] topoSort(int V, ArrayList<ArrayList<Integer>> adj) 
+    {
+        // add your code here
+        
+        int[] indegrees = new int[V];
+        
+        ArrayList<Integer> topo_sort = new ArrayList<>();
+        
+        Queue<Integer> q = new LinkedList<>();
+        
+        for(int i = 0;i<adj.size();i++){
+            for(int j = 0;j<adj.get(i).size();j++){
+                if(adj.get(i).size() > 0){
+                    indegrees[adj.get(i).get(j)]++;
+                }
+            }
+        }
+        
+        for(int i = 0 ;i < indegrees.length;i++){
+            if(indegrees[i] == 0){
+                q.add(i);
+            }
+        }
+        
+        while(!q.isEmpty()){
+            int ele = q.poll();
+            
+            for(int i = 0;i<adj.get(ele).size();i++){
+                int neighbors = adj.get(ele).get(i);
+                indegrees[neighbors]--;
+                if(indegrees[neighbors] == 0){
+                    q.add(neighbors);
+                }
+            }
+            
+            topo_sort.add(ele);
+            
+        }
+        
+        int[] topo_arr = new int[V];
+        
+        for(int i = 0;i<topo_sort.size();i++){
+            topo_arr[i] = topo_sort.get(i);
+        }
+        
+        return topo_arr;
+    }
+}
+
+```
+
+## Topological Sort (gfg) (Medium) (With dfs)
 
 Only applicable for directed acyclic graph (DAG);
 
@@ -860,68 +920,194 @@ class Solution
 }
 ```
 
-## Dijkstra's Algo (gfg) (Medium)
+## Cycle Detection in directed graphs (gfg) (Medium)
+
+Apply topo sort and we know topo sort is only applicable for directed acyclic graph and if we apply it on a directed cyclic graph then our array having topological ordering will always be lesser than the total number of vertices. 
 
 ```java
-class Solution
-{   
-    
-    public static class Pair{
-        int first;
-        int second;
-        public Pair(int f , int s){
-            this.first = f;
-            this.second = s;
-        }
-    }
-    //Function to find the shortest distance of all the vertices
-    //from the source vertex S.
-    static int[] dijkstra(int V, ArrayList<ArrayList<ArrayList<Integer>>> adj, int S)
-    {
-        // Write your code here
+class Solution {
+    // Function to detect cycle in a directed graph.
+    public boolean isCyclic(int V, ArrayList<ArrayList<Integer>> adj) {
+        // code here
         
-        PriorityQueue<Pair> pq = new PriorityQueue<>((a,b)-> {
-            if(a.first != b.first){
-                return a.first - b.first;
-            }
-            else{
-                return a.second - b.second;
-            }
-        });
+        ArrayList<Integer> topo_sort = new ArrayList<>();
         
-        int[] distance = new int[V];
-        for(int i = 0;i<distance.length;i++){
-            distance[i] = (int)(1e9);
-        }
+        int[] indegree = new int[V];
         
-        distance[S] = 0;
+        Queue<Integer> q = new LinkedList<>();
         
-        pq.add(new Pair(S , 0));
-        
-        while(!pq.isEmpty()){
-            Pair node = pq.poll();
-            
-            int nodeVal = node.first;
-            int nodeDistance = node.second;
-            
-            for(int i = 0;i<adj.get(nodeVal).size();i++){
-                ArrayList<Integer> neighbors = adj.get(nodeVal).get(i);
-                int neighborsNode = neighbors.get(0);
-                int neighborsDist = neighbors.get(1);
-                
-                int newDist = neighborsDist + nodeDistance;
-                
-                if(newDist < distance[neighborsNode]){
-                    distance[neighborsNode] = newDist;
-                    pq.add(new Pair(neighborsNode , newDist));
+        for(int i = 0;i<adj.size();i++){
+            for(int j = 0;j<adj.get(i).size();j++){
+                if(adj.get(i).size() > 0){
+                    indegree[adj.get(i).get(j)]++;
                 }
             }
         }
         
-        return distance;
+        
+        for(int i = 0;i<indegree.length;i++){
+            if(indegree[i] == 0){
+                q.add(i);
+            }
+        }
+        
+        while(!q.isEmpty()){
+            int ele = q.poll();
+            
+            for(int i = 0;i<adj.get(ele).size();i++){
+                int neighbors = adj.get(ele).get(i);
+                indegree[neighbors]--;
+                if(indegree[neighbors] == 0){
+                    q.add(neighbors);
+                }
+            }
+            
+            topo_sort.add(ele);
+        }
+        
+        if(topo_sort.size() < V){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
 ```
+
+## Course Schedule (leetcode - 207) (Medium)
+
+```java
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+
+        // Form Adjacency list
+
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+
+        for(int i = 0 ;i < numCourses;i++){
+            adj.add(new ArrayList<>());
+        }
+
+        for(int i = 0;i<prerequisites.length;i++){
+            ArrayList<Integer> arr = adj.get(prerequisites[i][1]);
+            arr.add(prerequisites[i][0]);
+        }
+
+        // Apply topological sort
+
+        int[] indegrees = new int[numCourses];
+
+        ArrayList<Integer> topo_sort = new ArrayList<>();
+
+        Queue<Integer> q = new LinkedList<>();
+
+        for(int i = 0;i<adj.size();i++){
+            for(int j = 0;j<adj.get(i).size();j++){
+                if(adj.get(i).size() > 0){
+                    indegrees[adj.get(i).get(j)]++;
+                }
+            }
+        }
+
+        for(int i = 0;i<indegrees.length;i++){
+            if(indegrees[i] == 0){
+                q.add(i);
+            }
+        }
+
+        while(!q.isEmpty()){
+            int ele = q.poll();
+
+            for(int i = 0;i<adj.get(ele).size();i++){
+                int neighbors = adj.get(ele).get(i);
+                indegrees[neighbors]--;
+                if(indegrees[neighbors] == 0){
+                    q.add(neighbors);
+                }
+            }
+
+            topo_sort.add(ele);
+        }
+
+        if(topo_sort.size() < numCourses){
+            return false;
+        }else{
+            return true;
+        }       
+    }
+}
+```
+
+## Course Schedule - II (leetcode - 210) (Medium)
+
+```java
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+
+        // Form Adjacency list
+
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+
+        for(int i = 0 ;i < numCourses;i++){
+            adj.add(new ArrayList<>());
+        }
+
+        for(int i = 0;i<prerequisites.length;i++){
+            ArrayList<Integer> arr = adj.get(prerequisites[i][1]);
+            arr.add(prerequisites[i][0]);
+        }
+
+        // Apply topological sort
+
+        int[] indegrees = new int[numCourses];
+
+        ArrayList<Integer> topo_sort = new ArrayList<>();
+
+        Queue<Integer> q = new LinkedList<>();
+
+        for(int i = 0;i<adj.size();i++){
+            for(int j = 0;j<adj.get(i).size();j++){
+                if(adj.get(i).size() > 0){
+                    indegrees[adj.get(i).get(j)]++;
+                }
+            }
+        }
+
+        for(int i = 0;i<indegrees.length;i++){
+            if(indegrees[i] == 0){
+                q.add(i);
+            }
+        }
+
+        while(!q.isEmpty()){
+            int ele = q.poll();
+
+            for(int i = 0;i<adj.get(ele).size();i++){
+                int neighbors = adj.get(ele).get(i);
+                indegrees[neighbors]--;
+                if(indegrees[neighbors] == 0){
+                    q.add(neighbors);
+                }
+            }
+
+            topo_sort.add(ele);
+        }
+
+        if(topo_sort.size() < numCourses){
+            int[] arr = {}; 
+            return arr;
+        }else{
+            int[] arr = new int[numCourses];
+            for(int i = 0;i<topo_sort.size();i++){
+                arr[i] = topo_sort.get(i);
+            }
+            return arr;
+        }   
+    }
+}
+```
+
+<!-- # Shortest Path Algorithms
 
 ## Shortest Path in undirected graph (gfg) (Medium)
 
@@ -1012,5 +1198,68 @@ class Solution {
     }
 }
 ```
+
+## Dijkstra's Algo (gfg) (Medium)
+
+```java
+class Solution
+{   
+    
+    public static class Pair{
+        int first;
+        int second;
+        public Pair(int f , int s){
+            this.first = f;
+            this.second = s;
+        }
+    }
+    //Function to find the shortest distance of all the vertices
+    //from the source vertex S.
+    static int[] dijkstra(int V, ArrayList<ArrayList<ArrayList<Integer>>> adj, int S)
+    {
+        // Write your code here
+        
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a,b)-> {
+            if(a.first != b.first){
+                return a.first - b.first;
+            }
+            else{
+                return a.second - b.second;
+            }
+        });
+        
+        int[] distance = new int[V];
+        for(int i = 0;i<distance.length;i++){
+            distance[i] = (int)(1e9);
+        }
+        
+        distance[S] = 0;
+        
+        pq.add(new Pair(S , 0));
+        
+        while(!pq.isEmpty()){
+            Pair node = pq.poll();
+            
+            int nodeVal = node.first;
+            int nodeDistance = node.second;
+            
+            for(int i = 0;i<adj.get(nodeVal).size();i++){
+                ArrayList<Integer> neighbors = adj.get(nodeVal).get(i);
+                int neighborsNode = neighbors.get(0);
+                int neighborsDist = neighbors.get(1);
+                
+                int newDist = neighborsDist + nodeDistance;
+                
+                if(newDist < distance[neighborsNode]){
+                    distance[neighborsNode] = newDist;
+                    pq.add(new Pair(neighborsNode , newDist));
+                }
+            }
+        }
+        
+        return distance;
+    }
+}
+``` -->
 
 
