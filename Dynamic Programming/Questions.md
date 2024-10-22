@@ -2,8 +2,8 @@
 # Questions Count
 
 1. Easy - 3
-2. Medium - 23
-3. Hard - 4
+2. Medium - 24
+3. Hard - 5
 
 ## Computing Fibonacci Series (Easy)
 
@@ -241,6 +241,68 @@ class Solution {
         dp.set(i , ans);
         return ans;
 
+    }
+}
+```
+
+## Optimal Strategy Of game (gfg) (Medium)
+
+```java
+class solve {
+    // Function to find the maximum possible amount of money we can win.
+    static long maximumAmount(int arr[], int n) {
+        // Your code here
+        
+        long[][][] dp = new long[n+1][n+1][2];
+        for(int i = 0;i<dp.length;i++){
+            for(int j = 0;j<dp[0].length;j++){
+                for(int k = 0;k<2;k++){
+                    dp[i][j][k] = -1L;
+                }
+            }
+        }
+        
+        return helper(0 , n-1 , 1 , arr , dp);
+        
+    }
+    
+    static long helper(int ptr1 , int ptr2 , int turn , int[] arr , long[][][] dp){
+        
+        if(ptr2 < ptr1){
+            return 0L;
+        }
+        
+        if(dp[ptr1][ptr2][turn] != -1L){
+            return dp[ptr1][ptr2][turn];
+        }
+        
+        long ans = -10L;
+        
+        if(turn == 1){
+
+            long pick1 = (long)arr[ptr1] + helper(ptr1+1 , ptr2 , 0 , arr , dp);
+            
+            long pick2 = (long)arr[ptr2] + helper(ptr1 , ptr2 - 1 , 0 , arr , dp);
+            
+            if(ptr1 == ptr2){
+                ans = pick1;
+            }else{
+                ans = Math.max(pick1 , pick2);
+            }
+            
+        }else if(turn == 0){
+            long pick1 = 0 + helper(ptr1+1 , ptr2 , 1 , arr , dp);
+            long pick2 = 0 + helper(ptr1 , ptr2 - 1 , 1 , arr , dp);
+            if(ptr1 == ptr2){
+                ans = pick1;
+            }else{
+                ans = Math.min(pick1 , pick2);
+            }
+        }
+        
+        dp[ptr1][ptr2][turn] = ans;
+        
+        return ans;
     }
 }
 ```
@@ -1819,6 +1881,63 @@ class Solution {
         }
         
         return maxi;
+    }
+}
+```
+
+# MCM DP / Partition Dp
+
+## Minimum Cost to Cut a stick (leetcode - 1547) (Hard)
+
+```java
+class Solution {
+    public int minCost(int n, int[] cuts) {
+
+        int c = cuts.length;
+
+        ArrayList<Integer> arr = new ArrayList<>();
+
+        arr.add(0);
+        arr.add(n);
+
+        for(int i = 0;i<cuts.length;i++){
+            arr.add(cuts[i]);
+        }
+        Collections.sort(arr);
+
+        int[][] dp = new int[c+1][c+1];
+
+        for(int i = 0;i<dp.length;i++){
+            for(int j = 0;j<dp[0].length;j++){
+                dp[i][j] = -1;
+            }
+        }
+
+        return helper(1 , c , arr , dp);
+        
+    }
+
+    public int helper(int idx1 , int idx2 , ArrayList<Integer> arr , int[][] dp){
+        if(idx1 > idx2){
+            return 0;
+        }
+
+        if(dp[idx1][idx2] != -1){
+            return dp[idx1][idx2];
+        }
+
+        int cost = Integer.MAX_VALUE;
+
+        for(int cut = idx1;cut <= idx2;cut++){
+
+            int current_cost = arr.get(idx2+1) - arr.get(idx1-1);
+
+            cost = Math.min(cost , current_cost + helper(idx1 , cut-1 , arr , dp) + helper(cut+1 , idx2 , arr , dp));
+        }
+
+        dp[idx1][idx2] = cost;
+
+        return cost;
     }
 }
 ```
