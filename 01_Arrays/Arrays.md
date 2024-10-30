@@ -1,6 +1,6 @@
 # One Dimensional arrays
 
-## Finding largest element in an array
+## Finding largest element in an array (easy)
 
 ```java
 class Solution {
@@ -17,7 +17,7 @@ class Solution {
 
 ```
 
-## Finding minimum and maximum element in an array
+## Finding minimum and maximum element in an array (easy)
 
 ```java
 class Solution
@@ -44,7 +44,7 @@ class Solution
 }
 ```
 
-## Finding the second largest element in an array
+## Finding the second largest element in an array (easy) (gfg)
 
 ```java
 class Solution {
@@ -78,7 +78,7 @@ class Solution {
 }
 ```
 
-## Finding the 3rd largest element in an array
+## Finding the 3rd largest element in an array (easy)
 ```java
 
 class Solution
@@ -128,7 +128,7 @@ class Solution
 }
 ```
 
-## Check if array is sorted or not (gfg)
+## Check if array is sorted or not (gfg) (easy)
 
 ```java
 class Solution {
@@ -142,7 +142,7 @@ class Solution {
     }
 }
 ```
-## Reversing an array
+## Reversing an array (gfg) (easy)
 
 ```java
     public static void reverse(int arr[]){
@@ -164,7 +164,7 @@ class Solution {
     }
 ```
 
-## Removing duplicates from a sorted array (leetcode - 26)
+## Removing duplicates from a sorted array (leetcode - 26) (easy)
 
 ```java
 // method - 1
@@ -212,7 +212,31 @@ class Solution {
 }
 ```
 
-## moving zeros to end (leetcode 283)
+## Contains Duplicate (leetcode - 217) (Easy)
+
+```java
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+
+        HashMap<Integer,Integer> m = new HashMap<>();
+
+        for(int i = 0;i<nums.length;i++){
+            if(m.containsKey(nums[i])){
+                return true;
+            }
+
+            m.put(nums[i],1);
+        }
+
+        System.out.println(m.size());
+
+        return false;
+        
+    }
+}
+```
+
+## moving zeros to end (leetcode 283) (easy)
 
 ```java
 
@@ -252,7 +276,7 @@ class Solution {
 
 ```
 
-## Right Rotation (leetcode 189)
+## Right Rotation (leetcode 189) (Medium)
 
 ```java
 class Solution {
@@ -284,7 +308,7 @@ class Solution {
 }
 ```
 
-## Left rotation (gfg)
+## Left rotation (gfg) (Medium)
 
 ```java
 class Solution{
@@ -316,7 +340,7 @@ class Solution{
    
 ```
 
-## Check if Array is sorted and rotated(leetcode - 1752)
+## Check if Array is sorted and rotated(leetcode - 1752) (Easy)
 
 ```java
 class Solution {
@@ -344,7 +368,7 @@ class Solution {
 }
 ``` 
 
-## Union of two sorted arrays (gfg)
+## Union of two sorted arrays (gfg) (medium)
 
 ```java
 class Solution
@@ -404,7 +428,7 @@ class Solution
 }
 ```
 
-## Intersection of two Arrays (leetcode - 349)
+## Intersection of two Arrays (leetcode - 349) (Easy)
 
 ```java
 class Solution {
@@ -451,7 +475,7 @@ class Solution {
 }
 ```
 
-## Missing Numbeer (leetcode - 268)
+## Missing Numbeer (leetcode - 268) (Easy)
 
 ```java
 class Solution {
@@ -470,7 +494,7 @@ class Solution {
 }
 ```
 
-## Max consecutive ones(leetcode - 485)
+## Max consecutive ones(leetcode - 485) (Easy)
 
 ```java
 class Solution {
@@ -500,7 +524,7 @@ class Solution {
 }
 ```
 
-## Single number (leetcode - 136)
+## Single number (leetcode - 136) (easy)
 
 ```java
 class Solution {
@@ -515,7 +539,43 @@ class Solution {
 }
 ```
 
-## Two Sum (leetcode - 1)
+## Longest Subarray with sum K (gfg) (Medium)
+
+```java
+class Solution {
+    // Function for finding maximum and value pair
+    public static int lenOfLongSubarr(int nums[], int N, int target) {
+        // Complete the function
+        
+        int length = 0;
+
+        HashMap<Integer , Integer> map = new HashMap<>();
+
+        int sum = 0;
+
+        for(int i = 0;i<nums.length;i++){
+
+            sum = sum + nums[i];
+
+            if(sum == target){
+                length = Math.max(length , i+1);
+            }else if(map.containsKey(sum - target)){
+                int prev_idx = map.get(sum - target);
+                length = Math.max(length , i - prev_idx);
+            }
+            
+            if(!map.containsKey(sum)){
+                map.put(sum , i);
+
+            }
+        }
+
+        return length;
+    }
+}
+```
+
+## Two Sum (leetcode - 1) (easy)
 
 ```java
 class Solution {
@@ -539,7 +599,7 @@ class Solution {
 }
 ```
 
-## Sort Colors (leetcode - 75)
+## Sort Colors (leetcode - 75) (Medium)
 
 ```java
 class Solution {
@@ -570,7 +630,7 @@ class Solution {
 }
 ```
 
-## Majority Element (leetcode - 169)
+## Majority Element (leetcode - 169) (medium)
 
 ```java
 class Solution {
@@ -603,7 +663,7 @@ class Solution {
 }
 ```
 
-## Maximum SubArray Sum (leetcode - 53) (Kadane's Algo)
+## Maximum SubArray Sum (leetcode - 53) (Kadane's Algo) (Medium)
 
 ```java
 class Solution {
@@ -627,7 +687,7 @@ class Solution {
 }
 ```
 
-## Rearrange Array Element by Sign (leetcode - 2149)
+## Rearrange Array Element by Sign (leetcode - 2149) (Medium)
 
 ```java
 class Solution {

@@ -2,7 +2,7 @@
 # Questions Count
 
 1. Easy - 3
-2. Medium - 24
+2. Medium - 29
 3. Hard - 5
 
 ## Computing Fibonacci Series (Easy)
@@ -334,7 +334,7 @@ class Solution {
 }
 ```
 
-## DP on Grids
+# DP on Grids 
 
 ## Geek's Training (gfg) (Medium)
 
@@ -520,6 +520,102 @@ class Solution {
 }
 ```
 
+## Triangle (leetcode - 120) (Medium)
+
+```java
+class Solution {
+    public static int minimizeSum(int k, ArrayList<ArrayList<Integer> >grid) {
+        // Code here
+        
+        int n = grid.size();
+        int m = grid.get(n-1).size();
+        
+        int [][] dp = new int[n+1][m+1];
+        
+        for(int i = 0;i<dp.length;i++){
+            for(int j = 0;j<dp[0].length;j++){
+                dp[i][j] = -1;
+            }
+        }
+        
+        return helper(0 , 0 , grid , dp, n , m);
+    }
+    
+    public static int helper(int idx1 , int idx2 , ArrayList<ArrayList<Integer>>grid , int[][] dp , int n , int m){
+        if(idx1 == n-1){
+            return grid.get(idx1).get(idx2);
+        }
+        
+        if(dp[idx1][idx2] != -1){
+            return dp[idx1][idx2];
+        }
+        
+        int bottom = grid.get(idx1).get(idx2) + helper(idx1+1 , idx2 , grid , dp , n , m);
+        int corner = grid.get(idx1).get(idx2) + helper(idx1+1 , idx2+1 , grid , dp , n , m);
+        
+        int ans = Math.min(bottom , corner);
+        
+        dp[idx1][idx2] = ans;
+        
+        return ans;
+    }
+}
+```
+
+## Minimum Falling path sum (leetcode - 931)
+
+```java
+class Solution {
+    public int minFallingPathSum(int[][] matrix) {
+
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        int[][] dp = new int[m][n];
+
+        for(int i = 0 ;i<m ;i++){
+            Arrays.fill(dp[i],Integer.MAX_VALUE);
+        }
+
+        return helper_one(matrix , m , n , dp);
+  
+    }
+
+    public int helper_one(int[][] matrix , int m , int n , int[][] dp){
+        int min = Integer.MAX_VALUE;
+        for(int j = 0 ; j < matrix[0].length;j++){
+            min = Math.min(min , helper_two(matrix,0 ,j,m , n , dp));
+        }
+        return min;
+    }
+
+    public int helper_two(int[][] matrix , int i , int j , int m , int n , int[][] dp){
+        if(j < 0 || j >= n){
+            return (int)1e9;
+        }
+
+        if(i == m-1){
+            dp[i][j] = matrix[i][j];
+            return matrix[i][j];
+        }
+
+
+        if(dp[i][j] != Integer.MAX_VALUE){
+            return dp[i][j];
+        }
+
+        int bottom = matrix[i][j] + helper_two(matrix , i+1 , j , m , n , dp);
+        int left_corner = matrix[i][j] + helper_two(matrix , i+1 , j-1 , m , n , dp);
+        int right_corner = matrix[i][j] +  helper_two(matrix , i+1 , j+1 , m , n , dp);
+
+        int ans = Math.min(bottom , Math.min(left_corner , right_corner));
+        dp[i][j] = ans;
+        return ans;
+    }
+
+}
+```
+
 ## Assembly line scheduling (gfg) (Medium)
 
 ```java
@@ -598,6 +694,207 @@ class Solution {
 }
         
 
+```
+
+# DP On subsequences
+
+
+## Subset Sum Problem (gfg) (Medium)
+
+
+```java
+class Solution {
+
+    static Boolean isSubsetSum(int arr[], int sum) {
+        // code here
+        
+        int[][] dp = new int[arr.length+1][sum+1];
+        
+        for(int i = 0;i<dp.length;i++){
+            for(int j = 0;j<dp[0].length;j++){
+                dp[i][j] = -1;
+            }
+        }
+        
+        return helper(0 , sum , arr , dp);
+    }
+    
+    static boolean helper(int idx , int sum , int[] arr , int[][] dp){
+        if(sum == 0){
+            return true;
+        }
+        
+        if(idx >= arr.length){
+            if(sum == 0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        
+        if(dp[idx][sum] != -1){
+            if(dp[idx][sum] == 1){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        
+        boolean take = false;
+        
+        if(sum >= arr[idx]){
+            take = helper(idx+1 , sum - arr[idx] , arr , dp);
+        }
+        
+        boolean no_take = helper(idx+1 , sum , arr , dp);
+        
+        boolean ans = take || no_take;
+        
+        if(ans == true){
+            dp[idx][sum] = 1;
+        }else{
+            dp[idx][sum] = 0;
+        }
+        
+        return ans;
+        
+    }
+}
+```
+
+## Perfect sum Problem (gfg) (Medium)
+
+(Count subsets with sum k)
+
+(Do not confuse it with "Subarray sum problem")
+
+```java
+class Solution{
+
+	public int perfectSum(int arr[],int n, int sum) 
+	{ 
+	    // Your code goes here
+	    
+	    Arrays.sort(arr);
+	    
+	    int[][] dp = new int[n+1][sum+1];
+	    
+	    for(int i = 0;i<dp.length;i++){
+	        for(int j = 0;j<dp[0].length;j++){
+	            dp[i][j] = -1;
+	        }
+	    }
+	    
+	    return helper(0 , sum , arr , dp) % 1000000007;
+	} 
+	
+	public int helper(int idx , int sum , int[] arr , int[][] dp){
+	    
+	    if(sum == 0){
+	        dp[idx][sum] = 1;
+	        return 1;
+	    }
+	    
+	    if(idx >= arr.length){
+	        if(sum == 0){
+	            return 1;
+	        }else{
+	            return 0;
+	        }
+	    }
+	    
+	    
+	    if(dp[idx][sum] != -1){
+	        return dp[idx][sum];
+	    }
+	    
+	    int take = 0;
+	    
+	    if(sum >= arr[idx]){
+	        take = helper(idx+1 , sum - arr[idx] , arr , dp) % 1000000007;
+	    }
+	    
+	    int no_take = helper(idx+1 , sum , arr , dp) % 1000000007;
+	    
+	    int ans = (take+no_take) % 1000000007;
+	    
+	    dp[idx][sum] = ans;
+	    
+	    return ans;
+	    
+	}
+	    
+}
+```
+## Partition equal subset sum (leetcode - 416) (Medium)
+
+Find if there is a subset whose sum equals the target where target = sum of all elements of the array / 2
+
+```java
+class Solution {
+    public boolean canPartition(int[] nums) {
+        
+        int sum = 0;
+        for(int i = 0 ;i<nums.length;i++){
+            sum = sum + nums[i];
+        }
+
+        if(sum % 2 != 0){
+            return false;
+        }
+
+        int[][] dp = new int[nums.length][sum/2 + 1];
+
+        for(int i = 0;i<dp.length;i++){
+            Arrays.fill(dp[i],-1);
+        }
+
+        return helper(nums , nums.length - 1 , sum/2 , dp);
+        
+    }
+
+    public boolean helper(int[] nums , int idx , int target , int[][] dp){
+        if(target == 0){
+            return true;
+        }
+
+        if(idx == 0){
+            if(target == nums[idx]){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
+        if(dp[idx][target] != -1){
+            if(dp[idx][target] == 1){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
+        boolean no_take = helper(nums , idx - 1 , target , dp);
+        boolean take = false;
+        if(target >= nums[idx]){
+            take =  helper(nums , idx - 1 , target - nums[idx] , dp);
+        }
+
+        boolean ans = take || no_take;
+
+        if(ans == true){
+            dp[idx][target] = 1;
+        }
+        else{
+            dp[idx][target] = 0;
+        }
+
+        return ans;
+    }
+
+}
 ```
 
 
