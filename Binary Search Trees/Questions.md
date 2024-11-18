@@ -114,6 +114,91 @@ class BST {
 }
 ```
 
+## Deleting a node in a BST (leetcode - 450) (Medium)
+
+```java
+class Solution{
+	public TreeNode deleteNode(TreeNode root , int key){
+		if(root == null){
+			return null;
+        }
+
+        if(root.val < key){
+            root.right = deleteNode(root.right , key);
+        }
+
+        if(root.val > key){
+            root.left = deleteNode(root.left , key);
+        }
+
+        if(root.val == key){
+
+            // left child present
+            if(root.right == null){
+                return root.left;
+            }
+
+            // right child present
+            if(root.left == null){
+                return root.right;
+            }
+            
+            // both present
+            if(root.right != null && root.left != null){
+                int succ_val = getSuccVal(root.right);
+                root.val = succ_val;
+                root.right = deleteNode(root.right , succ_val);
+            }
+        }
+
+        return root;
+    }
+
+    public int getSuccVal(TreeNode root){
+        TreeNode temp = root;
+        while(temp.left != null){
+            temp = temp.left;
+        }
+        return temp.val;
+    }
+}
+
+```
+
+## Count BST nodes that lie in a given range (gfg) (easy)
+
+```java
+class Solution
+{
+    //Function to count number of nodes in BST that lie in the given range.
+    
+    void helper(Node root , int l , int h , int[] count){
+        if(root == null){
+            return;
+        }
+        
+        if(root.data <= h && root.data >= l){
+            count[0] ++;
+            helper(root.left , l , h , count);
+            helper(root.right , l, h , count);
+        }else if(root.data < l){
+            helper(root.right , l , h , count);
+        }else if(root.data > h){
+            helper(root.left , l , h , count);
+        }
+    }
+    int getCount(Node root,int l, int h)
+    {
+        //Your code here
+        int[] count = {0};
+        
+        helper(root , l , h , count);
+        return count[0];
+    }
+}
+
+```
+
 ## Minimum value in a binary search tree (gfg) (easy)
 
 ```java
@@ -313,7 +398,7 @@ class Solution {
 }
 ```
 
-## Kth Smallest element in a BST with O(1) space (gfg) (Medium)
+## Kth Largest element in a BST with O(1) space (gfg) (Medium)
 
 ```java
 class Solution {
@@ -415,33 +500,34 @@ class Solution
 
 ```java
 class Solution {
-    public boolean isValidBST(TreeNode root) {
-
-        ArrayList<Integer> arr = new ArrayList<>();
-        inorder(root , arr);
-
-        boolean flag = true;
-
-        for(int i = 1 ; i<arr.size();i++){
-            if(arr.get(i-1) >= arr.get(i)){
-                flag = false;
-            }
-        }
-       
-       return flag;
-
-    }
-
-    public void inorder(TreeNode root , ArrayList<Integer> arr){
+    public void helper(TreeNode root , TreeNode[] prev , boolean[]result){
         if(root == null){
             return;
         }
 
-        inorder(root.left , arr);
+        helper(root.left , prev , result);
 
-        arr.add(root.val);
+        if(prev[0] != null){
+            if(root.val <= prev[0].val){
+                result[0] = false;
+            }
+        }
 
-        inorder(root.right , arr);
+        if(root != null){
+            prev[0] = root;
+        }
+
+
+        helper(root.right , prev , result);
+    }
+    public boolean isValidBST(TreeNode root) {
+
+        TreeNode[] prev = {null};
+        boolean[] result = {true};
+
+        helper(root , prev , result);
+
+        return result[0];
     }
 }
 ```
@@ -543,6 +629,134 @@ class Solution {
         return root;
     }
 }
+```
+
+## Flatten BST to sorted list (gfg) (Medium) 
+
+```java
+class Solution {
+    
+    public void inorder(Node root , ArrayList<Integer> arr){
+        if(root == null){
+            return;
+        }
+        
+        inorder(root.left , arr);
+        
+        arr.add(root.data);
+        
+        inorder(root.right , arr);
+    }
+    
+   
+    public Node flattenBST(Node root) {
+        // Code here
+        
+        ArrayList<Integer> arr = new ArrayList<>();
+        
+        inorder(root, arr);
+        
+        Node new_root = new Node(-1);
+        Node temp = new_root;
+        
+        int current = 0;
+        
+        while(current < arr.size()){
+            
+            temp.right = new Node(arr.get(current));
+            temp.left = null;
+            temp = temp.right;
+            current += 1;
+        }
+        
+        return new_root.right;
+    }
+}
+
+```
+
+## Populate inorder successor for all nodes (gfg) (Medium)
+
+```java
+class Solution {
+    
+    public void helper(Node root , Node[] prev){
+        if(root == null){
+            return;
+        }
+        
+        helper(root.right , prev);
+        
+        if(prev[0] != null){
+            root.next = prev[0];
+        }
+       
+        if(root != null){
+            prev[0] = root;
+        }
+        
+        helper(root.left , prev);
+    }
+    public void populateNext(Node root) {
+        // code here
+        
+        Node[] prev = {null};
+        
+        helper(root , prev);
+    }
+}
+```
+
+## Normal BST to balanced BST (leetcode - 1382) (Medium)
+
+```java
+class GfG
+{   
+    
+    void inorder(Node root , ArrayList<Integer> arr){   
+        if(root == null){
+            return;
+        }
+        
+        inorder(root.left , arr);
+        
+        arr.add(root.data);
+        
+        inorder(root.right , arr);
+    }
+    
+    Node buildTree(ArrayList<Integer>arr , int s , int e){
+        
+        if(s > e){
+            return null;
+        }
+        
+        int mid = s + (e-s)/2;
+        
+        Node root = new Node(arr.get(mid));
+        
+        root.left = buildTree(arr , s , mid - 1);
+        root.right = buildTree(arr , mid + 1 , e);
+        
+        
+        return root;
+    
+    }
+    Node buildBalancedTree(Node root) 
+    {
+        //Add your code here.
+        
+        ArrayList<Integer> arr = new ArrayList<>();
+        
+        inorder(root , arr);
+        
+        Node new_root = buildTree(arr , 0 , arr.size() - 1);
+        
+        return new_root;
+        
+    }
+}
+
 ```
 
 

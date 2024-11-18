@@ -539,42 +539,6 @@ class Solution {
 }
 ```
 
-## Longest Subarray with sum K (gfg) (Medium)
-
-```java
-class Solution {
-    // Function for finding maximum and value pair
-    public static int lenOfLongSubarr(int nums[], int N, int target) {
-        // Complete the function
-        
-        int length = 0;
-
-        HashMap<Integer , Integer> map = new HashMap<>();
-
-        int sum = 0;
-
-        for(int i = 0;i<nums.length;i++){
-
-            sum = sum + nums[i];
-
-            if(sum == target){
-                length = Math.max(length , i+1);
-            }else if(map.containsKey(sum - target)){
-                int prev_idx = map.get(sum - target);
-                length = Math.max(length , i - prev_idx);
-            }
-            
-            if(!map.containsKey(sum)){
-                map.put(sum , i);
-
-            }
-        }
-
-        return length;
-    }
-}
-```
-
 ## Two Sum (leetcode - 1) (easy)
 
 ```java
@@ -864,5 +828,520 @@ class Solution {
 }
 ```
 
+## k largest elements (gfg) (medium)
+
+```java
+class Solution{
+	public List<Integer> KLargest(int[] arr , int k){
+		List<Integer> K_largest_list;
+		K_largest_list = new ArrayList<>();
+
+		PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+		for(int i = 0;i<arr.length;i++){
+			if(pq.size() < k){
+				pq.add(arr[i]);
+        }else if(pq.size() == k){
+            if(pq.peek() < arr[i]){
+                pq.poll();
+                pq.add(arr[i]);
+                }
+            }
+        }
+
+        while(!pq.isEmpty()){
+            K_largest_list.add(pq.poll());
+        }
+
+        Collections.reverse(K_largest_list);
+
+        return K_largest_list;
+    }
+}
+
+```
+
+## Subarray sum equals k (leetcode 560) (Medium)
+
+```java
+class Solution {
+    public int subarraySum(int[] nums, int target) {
+
+        // stores prefix_sum and count
+		HashMap<Integer,Integer> map = new HashMap<>();
+
+		map.put(0,1);
+
+		int prefix_sum = 0;
+
+		int count = 0;
+
+		for(int i = 0;i<nums.length;i++){
+			prefix_sum += nums[i];
+
+			int required_sum = prefix_sum - target;
+			
+			if(map.containsKey(required_sum)){
+				int val = map.get(required_sum);
+				count += val;
+            }
+            if(map.containsKey(prefix_sum)){
+                int val = map.get(prefix_sum);
+                val += 1;
+                map.put(prefix_sum ,val);
+            }else{
+                map.put(prefix_sum ,1);
+            }
+        }
+        return count;
+    }
+}
+```
+
+## Zeros sum subarray (gfg) (Medium)
+
+Similar to previous problem with k = 0;
+
+```java
+class Solution {
+    
+     public int subarraySum(int[] nums, int target) {
+
+        // stores prefix_sum and count
+		HashMap<Integer,Integer> map = new HashMap<>();
+
+		map.put(0,1);
+
+		int prefix_sum = 0;
+
+		int count = 0;
+
+		for(int i = 0;i<nums.length;i++){
+			prefix_sum += nums[i];
+
+			int required_sum = prefix_sum - target;
+			
+			if(map.containsKey(required_sum)){
+				int val = map.get(required_sum);
+				count += val;
+            }
+            if(map.containsKey(prefix_sum)){
+                int val = map.get(prefix_sum);
+                val += 1;
+                map.put(prefix_sum ,val);
+            }else{
+                map.put(prefix_sum ,1);
+            }
+        }
+        return count;
+    }
+    
+    public int findSubarray(int[] arr) {
+        // code here.
+        
+        return subarraySum(arr , 0);
+    }
+}
+
+```
+
+## Count subarray with given xor (gfg) (Medium)
+
+```java
+class Solution {
+    public long subarrayXor(int arr[], int m) {
+        // code here
+        HashMap<Integer , Long> prefix_xor_map = new HashMap<>();
+
+		int xor = 0;
+
+		long count = 0;
+
+		prefix_xor_map.put(0,1L);
+
+		for(int i = 0;i<arr.length;i++){
+
+			xor = xor ^ arr[i];			
+			int required_xor = xor^m;
+
+			if(prefix_xor_map.containsKey(required_xor)){
+				long val = prefix_xor_map.get(required_xor);
+				count += val;
+            }
+            
+            if(prefix_xor_map.containsKey(xor)){
+            	long val =  prefix_xor_map.get(xor);
+            	val += 1L;
+            	prefix_xor_map.put(xor , val);
+            }else{
+            	prefix_xor_map.put(xor , 1L);
+            }
+        }
+        return count;
+    }
+}
+```
+
+
+
+## Longest Subarray with sum K (gfg) (Medium)
+
+```java
+class Solution {
+    // Function for finding maximum and value pair
+    public static int lenOfLongSubarr(int nums[], int N, int target) {
+        // Complete the function
+        
+        int length = 0;
+
+        HashMap<Integer , Integer> map = new HashMap<>();
+
+        int sum = 0;
+
+        for(int i = 0;i<nums.length;i++){
+
+            sum = sum + nums[i];
+
+            if(sum == target){
+                length = Math.max(length , i+1);
+            }else if(map.containsKey(sum - target)){
+                int prev_idx = map.get(sum - target);
+                length = Math.max(length , i - prev_idx);
+            }
+            
+            if(!map.containsKey(sum)){
+                map.put(sum , i);
+
+            }
+        }
+
+        return length;
+    }
+}
+```
+
+
+
+## Three Sum (leetcode - 15) (Medium)
+
+(space optimization required)
+
+```java
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+
+        Arrays.sort(nums);
+
+        int n = nums.length;
+
+        List<List<Integer>> threeSumList;
+        threeSumList = new ArrayList<>();
+
+        HashSet<List<Integer>> sum_set = new HashSet<>();
+
+        for(int i = 0;i<=n-3;i++){
+
+            int ptr1 = i;
+            int ptr2 = i+1;
+            int ptr3 = n-1;
+
+            while(true){
+                if(ptr2 >= ptr3){
+                    break;
+                }
+
+                int current_sum = nums[ptr1] + nums[ptr2] + nums[ptr3];
+
+                if(current_sum == 0){
+                    List<Integer> zero_sum_set;
+                    zero_sum_set = new ArrayList<>();
+                    zero_sum_set.add(nums[ptr1]);
+                    zero_sum_set.add(nums[ptr2]);
+                    zero_sum_set.add(nums[ptr3]);
+                    sum_set.add(zero_sum_set);
+                    ptr2 += 1;
+                }
+
+                else if(current_sum < 0){
+                    ptr2 += 1;
+                }else if(current_sum > 0){
+                    ptr3 -= 1;
+                }
+            }
+        }
+
+        for(List<Integer> sets : sum_set){
+            threeSumList.add(sets);
+        }
+
+        return threeSumList;  
+    }
+}
+```
+
+## Four Sum (leetcode - 18) (medium)
+
+(optimization required)
+```java
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+
+        Arrays.sort(nums);
+
+        int n = nums.length;
+
+        List<List<Integer>> list;
+        list = new ArrayList<>();
+
+        HashSet<List<Integer>> set = new HashSet<>();
+
+        for(int i = 0;i<=nums.length-4;i++){
+
+            for(int j = i+1;j<=nums.length-3;j++){
+
+                int ptr1 = i;
+                int ptr2 = j;
+                int ptr3 = j+1;
+                int ptr4 = n-1;
+
+                while(true){
+
+                    if(ptr3 >= ptr4){
+                        break;
+                    }
+
+                    if((long)nums[ptr1] + nums[ptr2] + nums[ptr3] + nums[ptr4] == target){
+
+                        List<Integer> individual_list;
+                        individual_list = new ArrayList<>();
+
+                        individual_list.add(nums[ptr1]);
+                        individual_list.add(nums[ptr2]);
+                        individual_list.add(nums[ptr3]);
+                        individual_list.add(nums[ptr4]);
+
+                        set.add(individual_list);
+                        ptr3++;
+                    }else if(nums[ptr1] + nums[ptr2] + nums[ptr3] + nums[ptr4] < target){
+                        ptr3++;
+                    }else{
+                        ptr4--;
+                    }
+
+                }
+
+            }
+
+        }
+
+        for(List<Integer> list1:set){
+            list.add(list1);
+        }
+
+        return list;
+        
+    }
+}
+```
+
+## Finding the repeating and missing number (gfg) (medium)
+
+```java
+class Solution {
+    // Function to find two elements in array
+    ArrayList<Integer> findTwoElement(int arr[]) {
+        int n = arr.length;
+        
+        long total_sum = (n * (n + 1L)) / 2;
+        long total_sum_of_squares = (n * (n + 1L) * (2 * n + 1L)) / 6;
+        
+        long array_sum = 0L;
+        long sum_of_squares_of_array = 0L;
+        
+        for (int i = 0; i < arr.length; i++) {
+            array_sum += arr[i];
+            sum_of_squares_of_array += (long) arr[i] * arr[i];
+        }
+        
+        long difference = array_sum - total_sum;
+        long square_difference = sum_of_squares_of_array - total_sum_of_squares;
+        
+        long addition = square_difference / difference;
+        
+        long repeating_number = (addition + difference) / 2;
+        long missing_number = (addition - difference) / 2;
+        
+        ArrayList<Integer> arr_list = new ArrayList<>();
+        arr_list.add((int) repeating_number);
+        arr_list.add((int) missing_number);
+        
+        return arr_list;
+    }
+}
+```
+
+## Maximum product subarray (leetcode - 152) (Medium)
+
+```java
+class Solution {
+    public int maxProduct(int[] nums) {
+
+        int n = nums.length;
+
+		int prefix_product = 1;
+		int suffix_product = 1;
+
+		int max_product = Integer.MIN_VALUE;
+
+		for(int i = 0;i<n;i++){
+
+            if(prefix_product == 0){
+                prefix_product = 1;
+            }
+
+            if(suffix_product == 0){
+                suffix_product = 1;
+            }
+			prefix_product *= nums[i];
+
+			max_product = Math.max(max_product , prefix_product);
+			suffix_product *= nums[n-i-1];
+           
+			max_product = Math.max(max_product , suffix_product);
+        }
+        return max_product;
+    }
+}
+```
+
 # Two Dimensional arrays
+
+## Spira matrix (leetcode - 54) (Medium)
+
+```java
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+
+        List<Integer> spiral_list;
+        spiral_list = new ArrayList<>();
+
+        int top = 0;
+        int left = 0;
+        int right = matrix[0].length - 1;
+        int bottom = matrix.length-1;
+
+
+        while(left <= right && top <= bottom){
+
+            for(int i = left;i<=right;i++){
+                spiral_list.add(matrix[top][i]);
+            }
+
+            top++;
+
+            for(int i = top;i<=bottom;i++){
+                spiral_list.add(matrix[i][right]);
+            }
+
+            right--;
+
+            if(top <= bottom){
+                for(int i = right;i>=left;i--){
+                    spiral_list.add(matrix[bottom][i]);
+                }
+                bottom--;
+
+            }
+
+            if(left <= right){
+
+                for(int i = bottom;i>=top;i--){
+                    spiral_list.add(matrix[i][left]);
+                }
+                left++;
+            }
+        }
+        return spiral_list;
+    }
+}
+```
+
+## Set matrix zeros (leetcode - 73) (Medium)
+```java
+class Solution {
+    public void setZeroes(int[][] arr) {
+        int m = arr.length;
+        int n = arr[0].length;
+		int[] row_arr = new int[m];
+		int[] column_arr = new int[n];
+		
+		for(int i = 0;i<n;i++){
+			column_arr[i] = 1;
+        }
+        
+        for(int i = 0;i<m;i++){
+            row_arr[i] = 1;
+        }
+
+        for(int i = 0;i<m;i++){
+        	for(int j = 0;j<n;j++){
+        		if(arr[i][j] == 0){
+        			row_arr[i] = 0;
+        			column_arr[j] = 0;
+                }
+            }
+        }
+    
+        for(int i = 0;i<m;i++){
+        	for(int j = 0;j<n;j++){
+        		if(row_arr[i] == 0 || column_arr[j] == 0){
+        			arr[i][j] = 0;
+                }
+            }
+        }
+    }
+}
+```
+
+## Rotate image (leetcode - 48) (medium)
+
+```java
+class Solution {
+    public void reverse(int[] row){
+		int ptr1 = 0;
+		int ptr2 = row.length-1;
+		
+		while(ptr1 <= ptr2){
+			int temp = row[ptr1];
+			row[ptr1] = row[ptr2];
+			row[ptr2] = temp;
+			ptr1++;
+			ptr2--;
+        }
+    }
+
+    public void rotate(int[][] matrix) {
+
+        int m = matrix.length;
+		int n = matrix[0].length;
+
+		// transpose
+
+		for(int i = 0;i<m;i++){
+			for(int j = i+1;j<n;j++){
+				int temp = matrix[i][j];
+				matrix[i][j] = matrix[j][i];
+				matrix[j][i] = temp;
+            }
+        }
+
+        // reverse rows
+
+        for(int i = 0;i<m;i++){
+            reverse(matrix[i]);
+        }
+    }
+}
+```
+
 
