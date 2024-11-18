@@ -563,6 +563,46 @@ class Solution {
 }
 ```
 
+## Two sum - II (input array is sorted) (leetcode - 167) (Medium)
+
+```java
+class Solution {
+    public int[] twoSum(int[] arr, int target) {
+
+        int n = arr.length;
+
+        for(int i = 0;i<n-1;i++){
+            int ptr1 = i+1;
+            int ptr2 = n-1;
+
+            int[] result = new int[2];
+
+            while(ptr1 <= ptr2){
+                
+                int mid = ptr1 + (ptr2 - ptr1)/2;
+
+                if(arr[i] + arr[mid] == target){
+                    result[0] = i+1;
+                    result[1] = mid+1;
+                    return result;
+                }
+
+                else if(arr[i] + arr[mid] > target){
+                    ptr2 = mid-1;
+                }
+
+                else if(arr[i] + arr[mid] < target){
+                    ptr1 = mid + 1;
+                }
+            }
+        }
+
+        return new int[2];
+        
+    }
+}
+```
+
 ## Sort Colors (leetcode - 75) (Medium)
 
 ```java
@@ -1210,6 +1250,36 @@ class Solution {
 			max_product = Math.max(max_product , suffix_product);
         }
         return max_product;
+    }
+}
+```
+
+## Merge sorted array (leetcode - 88) (easy)
+
+```java
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+
+        int ptr1 = m-1;
+        int ptr2 = n-1;
+        int ptr3 = nums1.length - 1;
+
+        while(ptr2 >= 0 && ptr1 >= 0){
+            if(nums1[ptr1] >= nums2[ptr2]){
+                nums1[ptr3] = nums1[ptr1];
+                ptr1--;
+                ptr3--;
+            }else if(nums1[ptr1] < nums2[ptr2]){
+                nums1[ptr3] = nums2[ptr2];
+                ptr3--;
+                ptr2--;
+            }
+        }
+        while(ptr2 >= 0){
+            nums1[ptr3] = nums2[ptr2];
+            ptr2--;
+            ptr3--;
+        }
     }
 }
 ```

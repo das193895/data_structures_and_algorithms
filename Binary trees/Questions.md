@@ -558,6 +558,39 @@ class Solution {
 }
 ```
 
+## Maximum path sum in a binary tree (leetcode - 124) (Hard)
+
+```java
+class Solution{
+    public int helper(TreeNode root , int[] max){
+		if(root == null){
+			return 0;
+        }
+
+        int left_path_sum = helper(root.left , max);
+        int right_path_sum = helper(root.right , max);
+
+        int path_sum_through_root = left_path_sum + right_path_sum + root.val;
+
+        int left_path_sum_through_root = left_path_sum + root.val;
+        int right_path_sum_through_root = right_path_sum + root.val;
+        int only_root = root.val;
+
+        max[0] = Math.max(max[0] , Math.max(left_path_sum_through_root , Math.max(right_path_sum_through_root , Math.max(only_root , path_sum_through_root))));
+
+        return Math.max(left_path_sum_through_root , Math.max(right_path_sum_through_root , only_root));
+
+    }
+
+	public int maxPathSum(TreeNode root){
+
+        int[] max = {Integer.MIN_VALUE};
+		helper(root,max);
+		return max[0];
+    }
+}
+```
+
 ## Vertical order traversal (leetcode - 987) (Hard)
 
 ```java
@@ -1225,6 +1258,285 @@ class Solution {
     }
 }
 ```
+
+## Count complete tree nodes (leetcode - 222) (easy)
+
+```java
+class Solution {
+
+    public int find_left_height(TreeNode root){
+        if(root == null){
+            return 0;
+        }
+
+        TreeNode temp = root;
+
+        int count = 0;
+
+        while(temp != null){
+            count += 1;
+            temp = temp.left;
+        }
+
+        return count;
+    }
+
+    public int find_right_height(TreeNode root){
+        if(root == null){
+            return 0;
+        }
+
+        TreeNode temp = root;
+
+        int count = 0;
+
+        while(temp != null){
+            count += 1;
+            temp = temp.right;
+        }
+
+        return count;
+    }
+
+    public int countNodes(TreeNode root) {
+
+        if(root == null){
+            return 0;
+        }
+
+        int left_height = find_left_height(root.left);
+        int right_height = find_right_height(root.right);
+
+        if(left_height == right_height){
+            int num_levels = left_height + 1;
+            int num_nodes = (int)Math.pow(2,num_levels) - 1;
+            return num_nodes;
+        }else{
+            return 1 + countNodes(root.left) + countNodes(root.right);
+        }
+        
+    }
+}
+```
+
+## All nodes at a distance k in a binary tree (leetcode - 863) (Medium)
+
+```java
+class Solution {
+
+    class Pair{
+		TreeNode parent;
+		TreeNode node;
+		public Pair(TreeNode r , TreeNode p){
+			this.node = r;
+			this.parent = p;
+        }
+    }
+
+    public void parent_map(TreeNode root,HashMap<TreeNode , TreeNode> map){
+
+        if(root == null){
+            return;
+        }
+
+        map.put(root , null);
+
+        Queue<TreeNode> q = new LinkedList<>();
+
+        q.add(root);
+
+        while(!q.isEmpty()){
+            TreeNode current_node = q.poll();
+
+            if(current_node.left != null){
+                map.put(current_node.left , current_node);
+                q.add(current_node.left);
+            }
+            if(current_node.right != null){
+                map.put(current_node.right , current_node);
+                q.add(current_node.right);
+            } 
+        }
+    }
+
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+
+        List<Integer> result;
+		result = new ArrayList<>();
+
+        HashMap<TreeNode , TreeNode> map = new HashMap<>();
+
+        parent_map(root , map);
+
+        HashSet<TreeNode> visited = new HashSet<>();
+
+        Queue<TreeNode> q = new LinkedList<>();
+
+        int distance = 0;
+
+        q.add(target);
+
+        while(!q.isEmpty()){
+            
+            int size = q.size();
+
+            for(int i = 0;i<size;i++){
+
+                TreeNode current_node = q.poll();
+
+                visited.add(current_node);
+
+                if(distance == k){
+                    result.add(current_node.val);
+                }
+
+                TreeNode parent = map.get(current_node);
+                TreeNode left_child = current_node.left;
+                TreeNode right_child = current_node.right;
+
+                if(parent != null && !visited.contains(parent)){
+                    visited.add(parent);
+                    q.add(parent);
+                }
+
+                if(left_child != null && !visited.contains(left_child)){
+                    visited.add(left_child);
+                    q.add(left_child);
+                }
+
+                if(right_child != null && !visited.contains(right_child)){
+                    visited.add(right_child);
+                    q.add(right_child);
+                }
+            }
+
+            distance += 1;
+           
+        }
+
+        return result;
+    }
+}
+```
+
+## Minimum time required to burn a binary tree (gfg) (Hard)
+
+```java
+class Solution
+{
+    /*class Node {
+    	int data;
+    	Node left;
+    	Node right;
+    
+    	Node(int data) {
+    		this.data = data;
+    		left = null;
+    		right = null;
+    	}
+    }*/
+    
+    public static class Pair{
+		Node node;
+		Node parent;
+		public Pair(Node n , Node p){
+			this.node = n;
+			this.parent = p;
+
+        }
+    }
+    
+    public static void build_parent_map(Node root , HashMap<Node , Node> parent_map , Node[] target_arr,int target){
+    	if(root == null){
+    		return;
+        }
+        
+        Queue<Node> q = new LinkedList<>();
+        
+        parent_map.put(root , null);
+        
+        q.add(root);
+        
+        while(!q.isEmpty()){
+        	Node current_node = q.poll();
+        
+        	if(current_node.data == target){
+        		target_arr[0] = current_node;
+            }
+        	
+        	if(current_node.left != null){
+        		parent_map.put(current_node.left , current_node);
+        		q.add(current_node.left);
+            }
+        
+            if(current_node.right != null){
+            	parent_map.put(current_node.right , current_node);
+            	q.add(current_node.right);
+            }
+        }
+    }
+
+
+    
+    public static int minTime(Node root, int target) 
+    {
+        // Your code goes here
+        
+        HashMap<Node , Node> parent_map = new HashMap<>();
+        Node[] target_arr = {null};
+        
+        build_parent_map(root,parent_map , target_arr,target);
+        
+        HashSet<Node> visited = new HashSet<>();
+        
+        Queue<Node> q = new LinkedList<>();
+        q.add(target_arr[0]);
+        
+        int time = 0;
+        
+        while(!q.isEmpty()){
+        	int size = q.size();
+        
+        	for(int i = 0;i<size;i++){
+        	    
+        		Node current_node = q.poll();
+        		
+        		visited.add(current_node);
+        		
+        
+        		Node parent = parent_map.get(current_node);
+        		Node left_child = current_node.left;
+        		Node right_child = current_node.right;
+        		
+        		if(parent != null && !visited.contains(parent)){
+        			visited.add(parent);
+        			q.add(parent);
+                }
+                
+                if(left_child != null && !visited.contains(left_child)){
+            			visited.add(left_child);
+            			q.add(left_child);
+                }
+                
+                if(right_child != null && !visited.contains(right_child)){
+                		visited.add(right_child);
+                		q.add(right_child);
+                }
+                
+            }
+        
+            time += 1;
+        }
+        
+        return time-1;
+
+    }
+}
+```
+
+
+
+
 
 
 
