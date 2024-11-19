@@ -186,6 +186,49 @@ class Solution {
 }
 ```
 
+## Average of levels in Binary tree (leetcode - 637) (easy)
+
+```java
+class Solution {
+    public List<Double> averageOfLevels(TreeNode root) {
+
+        Queue<TreeNode> q = new LinkedList<>();
+
+        List<Double> average_list;
+        average_list = new ArrayList<>();
+
+        q.add(root);
+
+        while(!q.isEmpty()){
+            int size = q.size();
+
+            Double level_sum = 0.0;
+
+            for(int i = 0;i<size;i++){
+                TreeNode current_node = q.poll();
+
+                level_sum += current_node.val;
+
+                if(current_node.left != null){
+                    q.add(current_node.left);
+                }
+
+                if(current_node.right != null){
+                    q.add(current_node.right);
+                }
+            }
+
+            Double level_avg = level_sum / size;
+
+            average_list.add(level_avg);
+        }
+
+        return average_list;
+        
+    }
+}
+```
+
 ## Binary Tree zig zag level order traversal (leetcode - 103) (Medium)
 
 ```java
@@ -1530,6 +1573,189 @@ class Solution
         
         return time-1;
 
+    }
+}
+```
+
+## Populating next pointers in each node a binary tree (leetcode -- 116)
+
+```java
+class Solution {
+    public Node connect(Node root) {
+
+        if(root == null){
+            return root;
+        }
+
+        Node curr = root;
+
+        while(curr.left != null){
+
+            Node temp = curr;
+
+            while(true){
+                if(temp == null){
+                    break;
+                }
+                temp.left.next = temp.right;
+                if(temp.next != null){
+                    temp.right.next = temp.next.left;
+                }
+
+                temp = temp.next;
+            }
+
+            curr = curr.left;
+        }
+        return root;
+    }
+}
+```
+
+## Populating next pointers in each node a binary tree - II (leetcode -- 117)
+
+```java
+class Solution {
+    public Node connect(Node root) {
+
+        if(root == null){
+            return root;
+        } 
+
+        Node  curr = root;
+
+        while(curr != null){
+            Node dummy = new Node(0);
+            Node temp = dummy;
+
+            while(curr != null){
+
+                if(curr.left != null){
+                    temp.next = curr.left;
+                    temp = temp.next;
+                }
+
+                if(curr.right != null){
+                    temp.next = curr.right;
+                    temp = temp.next;
+                }
+
+                curr = curr.next;
+            }
+
+            curr = dummy.next;
+            
+        }
+
+        return root;
+    }
+}
+```
+
+## Flatten binary tree to linked list (leetcode - 114)
+
+```java
+class Solution {
+    public void flatten(TreeNode root) {
+
+        TreeNode[] prev = {null};
+
+        helper(root , prev); 
+    }
+
+    public void helper(TreeNode root , TreeNode[] prev){
+        if(root == null){
+            return;
+        }
+
+        helper(root.right , prev);
+        helper(root.left , prev);
+
+        root.right = prev[0];
+        root.left = null;
+        prev[0] = root;
+    }
+}
+```
+
+## Path sum (leetcode - 112) (easy)
+
+```java
+class Solution {
+
+    public void helper(TreeNode root , int targetSum , int[] sum , boolean[] result){
+        if(root == null){
+            return;
+        }
+
+        sum[0] = sum[0] + root.val;
+
+        if(root.left == null && root.right == null){
+            
+            if(sum[0] == targetSum){
+                result[0] = true;
+            }
+            sum[0] = sum[0] - root.val;
+            return;
+        }
+
+        helper(root.left , targetSum , sum , result);
+        helper(root.right , targetSum , sum , result);
+
+        sum[0] = sum[0] - root.val;
+    }
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+
+        int[] sum = {0};
+
+        boolean[] result = {false};
+
+        helper(root , targetSum , sum , result);
+
+        return result[0];
+        
+    }
+}
+```
+
+## Sum root to leaf numbers (leetcode - 129) (Medium)
+
+```java
+class Solution {
+    public void helper(TreeNode root , ArrayList<String> arr , StringBuilder[] sb){
+
+        if(root == null){
+            return;
+        }
+
+        sb[0].append(root.val);
+
+        if(root.left == null && root.right == null){
+            arr.add(sb[0].toString());
+            sb[0].deleteCharAt(sb[0].length()-1);
+            return;
+        }
+
+        helper(root.left , arr , sb);
+        helper(root.right , arr , sb);
+
+        sb[0].deleteCharAt(sb[0].length()-1);
+    }
+
+    public int sumNumbers(TreeNode root) {
+
+        ArrayList<String> arr = new ArrayList<>();
+
+        StringBuilder[] sb = {new StringBuilder("")};
+
+        helper(root , arr , sb);
+
+        int total_sum = 0;
+
+        for(int i = 0;i<arr.size();i++){
+            total_sum += Integer.parseInt(arr.get(i));
+        }
+        return total_sum;
     }
 }
 ```

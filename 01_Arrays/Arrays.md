@@ -1254,6 +1254,87 @@ class Solution {
 }
 ```
 
+## Trapping Rain water problem (leetcode - 42) (hard)
+
+```java
+class Solution {
+    public int trap(int[] height) {
+
+        int[] left = new int[height.length];
+        int[] right = new int[height.length];
+        
+        right[height.length-1] = 0;
+        int right_max = Integer.MIN_VALUE;
+        for(int i = height.length-2;i>=0;i--){
+            right[i] = Math.max(right[i+1],height[i+1]);
+        }
+
+        int sum = 0;
+        
+        left[0] = 0;
+        for(int i = 0;i<height.length;i++){
+            if(i > 0){
+                left[i] = Math.max(left[i-1],height[i-1]);
+            }
+            int add = Math.min(left[i],right[i]) - height[i];
+            if(add < 0){
+                sum = sum + 0;
+            }
+            else{
+                sum = sum + add;
+            }
+        }
+        return sum;
+    }
+}
+```
+
+## Product of array except self (leetcode - 238) (Medium)
+
+```java
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        
+        int n = nums.length;
+        int[] left_product_arr = new int[n];
+        int[] right_product_arr = new int[n];
+
+        left_product_arr[0] = nums[0];
+        right_product_arr[n-1] = nums[n-1];
+
+        for(int i = 0;i<n;i++){
+
+            int idx1 = i;
+            int idx2 = n-i-1;
+
+            if(idx1 != 0){
+                left_product_arr[idx1] = nums[idx1] * left_product_arr[idx1-1];
+            }
+
+            if(idx2 != n-1){
+                right_product_arr[idx2] = nums[idx2] * right_product_arr[idx2+1];
+            }
+        }
+
+        int[] product_arr = new int[n];
+
+        for(int i = 0;i<n;i++){
+            if(i == 0){
+                product_arr[0] = right_product_arr[1];
+            }else if(i == n-1){
+                product_arr[n-1] = left_product_arr[n-2];
+            }else{
+                int current_product = left_product_arr[i-1] * right_product_arr[i+1];
+                product_arr[i] = current_product;
+            }
+        }
+
+        return product_arr;
+        
+    }
+}
+```
+
 ## Merge sorted array (leetcode - 88) (easy)
 
 ```java
@@ -1283,6 +1364,8 @@ class Solution {
     }
 }
 ```
+
+
 
 # Two Dimensional arrays
 
