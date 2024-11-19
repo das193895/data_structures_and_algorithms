@@ -1,3 +1,11 @@
+# Questions count
+
+1. Easy - 16
+2. medium - 24
+3. Hard - 1
+4. Total - 39
+
+
 # One Dimensional arrays
 
 ## Finding largest element in an array (easy)
@@ -717,7 +725,7 @@ class Solution {
 }
 ```
 
-## Next Permutation (leetcode - 31)
+## Next Permutation (leetcode - 31) (Medium)
 
 ```java
 class Solution {
@@ -767,7 +775,7 @@ class Solution {
 }
 ```
 
-## Longest Consecutive Sequence (leetcode - 128)
+## Longest Consecutive Sequence (leetcode - 128) (medium)
 
 ```java
 class Solution {
@@ -798,7 +806,7 @@ class Solution {
 }
 ```
 
-## Leaders in an array (gfg)
+<!-- ## Leaders in an array (gfg)
 
 ```java
 class Solution{
@@ -823,9 +831,9 @@ class Solution{
         return arr1;
     }
 }
-```
+``` -->
 
-## Search in rotated sorted array (leetcode - 33)
+## Search in rotated sorted array (leetcode - 33) (Medium)
 
 ```java
 // A good question apply binary search with logic
@@ -1369,7 +1377,7 @@ class Solution {
 
 # Two Dimensional arrays
 
-## Spira matrix (leetcode - 54) (Medium)
+## Spiral matrix (leetcode - 54) (Medium)
 
 ```java
 class Solution {
