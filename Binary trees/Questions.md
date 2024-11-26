@@ -2,9 +2,9 @@
 
 # Questions Count 
 
-1. easy - 10
-2. Medium - 13
-3. Hard - 2
+1. easy - 14
+2. Medium - 19
+3. Hard - 5
 
 
 ## Count maximum number of nodes in a level of a tree (gfg) (easy)
@@ -1577,7 +1577,7 @@ class Solution
 }
 ```
 
-## Populating next pointers in each node a binary tree (leetcode -- 116)
+## Populating next pointers in each node a binary tree (leetcode -- 116) (Medium)
 
 ```java
 class Solution {
@@ -1612,7 +1612,7 @@ class Solution {
 }
 ```
 
-## Populating next pointers in each node a binary tree - II (leetcode -- 117)
+## Populating next pointers in each node a binary tree - II (leetcode -- 117) (Medium)
 
 ```java
 class Solution {
@@ -1652,7 +1652,7 @@ class Solution {
 }
 ```
 
-## Flatten binary tree to linked list (leetcode - 114)
+## Flatten binary tree to linked list (leetcode - 114) (Medium)
 
 ```java
 class Solution {
@@ -1756,6 +1756,135 @@ class Solution {
             total_sum += Integer.parseInt(arr.get(i));
         }
         return total_sum;
+    }
+}
+```
+
+## Paths from root with a specified sum (gfg) (medium)
+
+```java
+class Solution
+{   
+    public static void helper(Node root , int sum , int[] current_sum , ArrayList<ArrayList<Integer>> final_list , ArrayList<Integer> target_sum_list){
+        
+        if(root == null){
+            return;
+        }
+        
+        target_sum_list.add(root.data);
+        
+        current_sum[0] += root.data;
+        
+        if(current_sum[0] == sum){
+            ArrayList<Integer> arr = new ArrayList<>(target_sum_list);
+            final_list.add(arr);
+        }
+        
+        helper(root.left , sum , current_sum , final_list  , target_sum_list);
+        helper(root.right , sum , current_sum , final_list  , target_sum_list);
+        
+        target_sum_list.remove(target_sum_list.size()-1);
+        current_sum[0] -= root.data;
+        
+    }
+        
+    public static ArrayList<ArrayList<Integer>> printPaths(Node root, int sum)
+    {
+        // code here
+        
+        int[] current_sum = {0};
+        
+        ArrayList<ArrayList<Integer>> final_list = new ArrayList<>();
+        
+        ArrayList<Integer> target_sum_list = new ArrayList<>();
+        
+        helper(root , sum , current_sum , final_list , target_sum_list);
+        
+        return final_list;   
+    }
+}
+```
+
+## Serielize & deserielize binary tree (hard) (leetcode - 297)
+
+```java
+public class Codec {
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+
+        StringBuilder sb = new StringBuilder("");
+
+        Queue<TreeNode> q = new LinkedList<>();
+
+        q.add(root);
+
+        while(!q.isEmpty()){
+            TreeNode node = q.poll();
+
+            if(node == null){
+                sb.append("N,");
+            }else{
+                sb.append(node.val);
+                sb.append(",");
+            }
+
+            if(node != null){
+                q.add(node.left);
+                q.add(node.right);
+            }
+        }
+
+        sb.deleteCharAt(sb.length()-1);
+
+        return sb.toString();
+        
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+
+        if(data.charAt(0) == 'N'){
+            return null;
+        }
+
+        String[] str_arr = data.split(",");
+
+        Queue<TreeNode> q = new LinkedList<>();
+
+        TreeNode root = new TreeNode(Integer.parseInt(str_arr[0]));
+
+        q.add(root);
+
+        int i = 1;
+
+        while(!q.isEmpty()){
+            TreeNode current_node = q.poll();
+
+            TreeNode leftNode = null;
+
+            if(!str_arr[i].equals("N")){
+
+                leftNode = new TreeNode(Integer.parseInt(str_arr[i]));
+                q.add(leftNode);
+            }
+
+            current_node.left = leftNode;
+            
+            i += 1;
+
+            TreeNode rightNode = null;
+
+            if(!str_arr[i].equals("N")){
+                rightNode = new TreeNode(Integer.parseInt(str_arr[i]));
+                q.add(rightNode);
+            }
+
+            current_node.right = rightNode;
+
+            i += 1;
+        }
+        return root;
+        
     }
 }
 ```
