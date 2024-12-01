@@ -629,3 +629,259 @@ class Solution {
     }
 }
 ```
+
+## Median of Two sorted Arrays (leetcode - 4) (Hard)
+
+```java
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+
+        int n1 = nums1.length;
+        int n2 = nums2.length;
+
+        if(n1 > n2){
+            return findMedianSortedArrays(nums2 , nums1);
+        }
+
+        int total_on_left_half = (n1+n2+1)/2;
+        int total = (n1 + n2);
+
+        int s = 0;
+        int e = nums1.length;
+
+        while(s <= e){
+
+            int mid1 = s + (e-s)/2;
+            int mid2 = total_on_left_half - mid1;
+
+            int r1 = Integer.MAX_VALUE;
+            int l1 = Integer.MIN_VALUE;
+
+            int r2 = Integer.MAX_VALUE;
+            int l2 = Integer.MIN_VALUE;
+
+            if(mid1 < n1){
+                r1 = nums1[mid1];
+            }
+
+            if(mid2 < n2){
+                r2 = nums2[mid2];
+            }
+
+            if(mid1-1 >= 0){
+                l1 = nums1[mid1 - 1];
+            }
+
+            if(mid2 - 1 >= 0){
+                l2 = nums2[mid2-1];
+            }
+
+            if(l1 <= r2 && l2 <= r1){
+
+                // it is the required condition
+
+                if(total % 2 == 0){
+                    return (Math.max(l1 , l2) + Math.min(r1 , r2)) / 2.0;
+                }else{
+                    return Math.max(l1 , l2);
+                }
+
+            }else if(l1 > r2){
+                e = mid1 - 1;
+            }else{
+                s = mid1 + 1;
+            }
+        }
+
+        return -1.0;
+        
+    }
+}
+```
+
+## Find the row with Max ones (gfg) (Medium)
+
+```java
+class Solution {
+    public int rowWithMax1s(int arr[][]) {
+        // code here
+        
+        int m = arr.length;
+        int n = arr[0].length;
+        
+        int idx = -1;
+        int maxNumOfOnes = Integer.MIN_VALUE;
+        
+        for(int i = 0;i<m;i++){
+            
+            int lowerBound = lowerBound(arr[i]);
+            
+            if(lowerBound == -1){
+                continue;
+            }
+            
+            int numOfOnesInCurrentRow = arr[i].length - lowerBound;
+            
+            if(numOfOnesInCurrentRow > maxNumOfOnes){
+                idx = i;
+                maxNumOfOnes = numOfOnesInCurrentRow;
+            }
+        }
+        
+        return idx;
+    }
+    
+    public int lowerBound(int[] arr){
+        
+        int ans = -1;
+        
+        int s = 0;
+        int e = arr.length-1;
+        
+        while(s <= e){
+            
+            int mid = s + (e-s)/2;
+            
+            if(arr[mid] == 1){
+                
+                ans = mid;
+                e = mid -1;
+                
+                
+            }else if(arr[mid] < 1){
+                s = mid + 1;
+                
+            }
+            
+        }
+        
+        return ans;
+    }
+}
+```
+
+## Search in a 2D matrix (leetcode - 74) (Medium)
+
+```java
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        int s = 0;
+        int e = (m*n) - 1;
+
+
+        while(s <= e){
+            int mid = s + (e-s)/2;
+
+            // System.out.println(mid);
+
+            int rowNum = mid / n;
+            int columnNum = mid % n;
+
+            if(matrix[rowNum][columnNum] == target){
+                return true;
+            }
+
+            else if(matrix[rowNum][columnNum] < target){
+                s = mid + 1;
+            }
+
+            else{
+                e = mid - 1;
+            }
+        }
+
+        return false;
+    }
+}
+```
+
+## Search in a 2D matrix - II (leetcode - 240)
+
+```java
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        
+
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        int row = 0;
+        int column = n - 1;
+
+        while(row < m && column >= 0){
+            if(matrix[row][column] == target){
+                return true;
+            }
+
+            else if(matrix[row][column] > target){
+
+                column--;
+
+            }else{
+                row++;
+            }
+        }
+
+        return false;
+    }
+}
+```
+
+<!-- ```java
+class Main {
+    
+    // make a new student class 
+    
+    static class Student{
+        String name;
+        int roll_number;
+        float marks;
+    }
+    
+    // A class with constructor
+    static class Human{
+        String name;
+        int age;
+        boolean isMarried;
+        
+        // A constructor
+        Human(String new_name , int new_age , boolean marital_status){
+            this.name = new_name;
+            this.age = new_age;
+            this.isMarried = marital_status;
+        }
+    }
+    public static void main(String[] args) {
+        System.out.println("Try programiz.pro");
+        
+        Student student; // just makes a referance 
+        student = new Student(); // allocates memory (new - dynamically allocates memory at run time)
+    
+        // it will just print the default values
+        System.out.println(student.name); // null
+        System.out.println(student.roll_number); // 0
+        System.out.println(student.marks); //0.0
+        
+        // we can assign values to the instance variables 
+        student.name = "rahul";
+        student.roll_number = 2;
+        student.marks = 33;
+        
+        Human human = new Human("rahul" , 23 , false); // initialize instance variables with help of the constructor
+        
+        System.out.println(human.name); // rahul
+        System.out.println(human.age); // 23
+        System.out.println(human.isMarried); // false
+        
+        human.age = 34; // we can override the values
+        System.out.println(human.age); // 34
+        
+        
+        
+    }
+}
+``` -->

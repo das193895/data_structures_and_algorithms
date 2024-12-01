@@ -648,7 +648,7 @@ class Solution {
 }
 ```
 
-## Reorder list (gfg) (hard)
+## Reorder list (Leetcode - 143) (Medium)
 
 ```java
 class Solution {
@@ -854,6 +854,135 @@ class Solution {
         head_even = null;
         
         return head;
+        
+    }
+}
+```
+
+## Merge 2 sorted lists (leetcode - 21) (Easy)
+
+```java
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+
+        if(list1 == null && list2 == null){
+            return null;
+        }
+
+        if(list1 != null && list2 == null){
+            return list1;
+        }
+
+        if(list2 != null && list1 == null){
+            return list2;
+        }
+
+        ListNode temp1 = list1;
+        ListNode temp2 = list2;
+
+        ListNode dummy = new ListNode(-1);
+
+        ListNode temp = dummy;
+
+        while(temp1 != null && temp2 != null){
+            if(temp1.val <= temp2.val){
+                temp.next = temp1;
+                temp1 = temp1.next;
+                temp = temp.next;
+            }else{
+                temp.next = temp2;
+                temp2 = temp2.next;
+                temp = temp.next;
+            }
+        }
+
+        while(temp1 != null){
+            temp.next = temp1;
+            temp = temp.next;
+            temp1 = temp1.next;
+        }
+
+        while(temp2 != null){
+            temp.next = temp2;
+            temp = temp.next;
+            temp2 = temp2.next;
+        }
+
+        return dummy.next;
+    }
+}
+```
+
+## Copy list with random pointer (leetcode - 138) (Medium)
+
+```java
+class Solution {
+    public Node copyRandomList(Node head) {
+
+        if(head == null){
+            return null;
+        }
+
+        // insert duplicate nodes
+
+        Node temp = head;
+
+        while(temp != null){
+
+            Node node = new Node(temp.val);
+
+            Node temp_next = temp.next;
+            temp.next = node;
+            node.next = temp_next;
+            temp = temp.next.next;
+
+        }
+
+        // update random pointers
+
+        temp = head;
+
+        while(temp != null){
+            Node random = temp.random;
+
+            if(random != null){
+                temp.next.random = random.next;
+
+            }else{
+                temp.random = null;
+            }
+
+            temp = temp.next.next;
+        }
+
+        temp = head;
+
+        // update next pointers and reconnect the original list
+
+        Node dummy = new Node(-1);
+
+        Node ptr = dummy;
+
+        while(temp != null){
+            ptr.next = temp.next;
+            ptr = ptr.next;
+            temp.next = temp.next.next;
+            temp = temp.next;
+        }
+
+        return dummy.next;
+    }
+}
+```
+
+## Delete Node in linked list when a node is given (leetcode - 237)
+
+```java
+class Solution {
+    public void deleteNode(ListNode node) {
+
+        node.val = node.next.val;
+        node.next = node.next.next;
         
     }
 }
