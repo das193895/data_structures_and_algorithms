@@ -5,7 +5,7 @@
 2. Medium - 16
 3. Hard - 
 
-degree of a node is the number of edges that are connected to that node . And in a graph total degree = 2 * no_odf_edges
+degree of a node is the number of edges that are connected to that node . And in a graph total degree = 2 * no_of_edges
 directed graph -- indegree and out degree are there
 
 Storing the graph -- Adjacency list(O(2M)) and Adjacency matrix(O(NM)) N is the number of nodes and M is the number of edges

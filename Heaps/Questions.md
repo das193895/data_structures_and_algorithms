@@ -719,7 +719,6 @@ class Solution {
                 ans[1] = current_max;
             }
         }
-
         return ans;
     }
 }

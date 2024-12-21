@@ -1,6 +1,6 @@
 # Abstraction 
 
-bstraction in Java is the process in which we only show essential details/functionality to the user. The non-essential implementation details are not displayed to the user. 
+Abstraction in Java is the process in which we only show essential details/functionality to the user. The non-essential implementation details are not displayed to the user. 
 
 In Java, abstraction is achieved by interfaces and abstract classes. We can achieve 100% abstraction using interfaces.
 

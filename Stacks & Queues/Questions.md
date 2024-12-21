@@ -282,3 +282,236 @@ class Solution
     } 
 }
 ```
+
+## Next greater element-II (leetcode - 503) (Medium)
+
+```java
+class Solution {
+    public int[] nextGreaterElements(int[] nums) {
+
+        int[] nge = new int[nums.length];
+
+        Stack<Integer> s = new Stack<>();
+
+        int upper_bound = 2 * nums.length - 1;
+
+        for(int i = upper_bound;i >= 0;i--){
+
+            while(!s.isEmpty() && s.peek() <= nums[i%nums.length]){
+                s.pop();
+            }
+
+            if(i < nums.length){
+                if(s.isEmpty()){
+                    nge[i] = -1;
+                }
+                else{
+                    nge[i] = s.peek();
+                }
+            }
+            s.push(nums[i%nums.length]);
+        }
+        return nge;
+    }
+}
+```
+
+## Previous smaller element  (gfg) (Medium)
+
+```java
+class Solution{
+    static List<Integer> leftSmaller(int n, int a[])
+    {
+        //code here
+        
+        List<Integer> result = new ArrayList<>();
+        
+        for(int i = 0;i<n;i++){
+            result.add(0);
+        }
+        
+        Stack<Integer> stack = new Stack<>();
+        
+        for(int i = 0;i<n;i++){
+            
+            int current_element = a[i];
+            int current_idx = i;
+            
+            while(!stack.isEmpty() && stack.peek() >= current_element){
+                stack.pop();
+            }
+            
+            if(stack.isEmpty()){
+                int nge = -1;
+                result.set(current_idx , nge);
+            }else{
+                int nge = stack.peek();
+                result.set(current_idx , nge);
+            }
+            
+            stack.add(current_element);
+        }
+        
+        return result;
+    }
+}
+```
+
+## Sum of subarray minimum (leetcode - 907)
+
+```java
+class Solution {
+    public int sumSubarrayMins(int[] arr) {
+
+        int n = arr.length;
+
+        int mod = (int)(1e9 + 7);
+
+        ArrayList<Integer> nsi = next_smaller_idx(arr);
+        ArrayList<Integer> psi = previous_smaller_idx(arr);  
+
+        long sum = 0;
+
+        for(int i = 0;i<n;i++){
+
+            int element = arr[i];
+            int nsiOfElement = nsi.get(i);
+            int psiOfElement = psi.get(i);
+
+            sum = (sum + (long) element * (nsiOfElement - i) * (i - psiOfElement) % mod) % mod;
+        }
+
+        return (int)sum;
+
+    }
+
+    public ArrayList<Integer> next_smaller_idx(int[] arr){
+
+        int n = arr.length;
+
+        ArrayList<Integer> result = new ArrayList<>();
+
+        for(int i = 0;i<n;i++){
+            result.add(0);
+        }
+
+        Stack<Integer> stack = new Stack<>();
+
+        for(int i = n-1;i>=0;i--){
+
+            int current_element = arr[i];
+            int current_idx = i;
+
+            while(!stack.isEmpty() && current_element <= arr[stack.peek()]){
+                stack.pop();
+            }
+
+            if(stack.isEmpty()){
+                result.set(i,n);
+            }else{
+                result.set(i,stack.peek());
+            }
+
+            stack.add(i);
+        }
+
+        return result;
+        
+    }
+
+    // find previous smaller or equal element for edge cases
+
+    public ArrayList<Integer> previous_smaller_idx(int[] arr){
+
+        int n = arr.length;
+
+        ArrayList<Integer> result = new ArrayList<>();
+
+        for(int i = 0;i<n;i++){
+            result.add(0);
+        }
+
+        Stack<Integer> stack = new Stack<>();
+
+        for(int i = 0;i < n;i++){
+
+            int current_element = arr[i];
+            int current_idx = i;
+
+            while(!stack.isEmpty() && current_element < arr[stack.peek()]){  // here equal sign should no be there because we might encounter duplicate elements
+                stack.pop();
+            }
+
+            if(stack.isEmpty()){
+                result.set(i,-1);
+            }else{
+                result.set(i,stack.peek());
+            }
+
+            stack.add(i);
+        }
+
+        return result;
+
+    }
+}
+```
+
+## Asteroid Collision (leetcode - 735) (Medium)
+
+```java
+class Solution {
+    public int[] asteroidCollision(int[] asteroids) {
+
+        int n = asteroids.length;
+		Stack<Integer> stack = new Stack<>();
+		int i = 0;
+		while(true){
+			if(i >= n){
+				break;
+            }
+            int current_element = asteroids[i];
+            if(stack.isEmpty()){
+                stack.add(current_element);
+                i += 1;
+            }else{
+
+                if(current_element*stack.peek() > 0){
+                    stack.add(current_element);
+                    i += 1;
+                }
+
+                else if(current_element < 0 && stack.peek() > 0){
+                    if(Math.abs(current_element) == Math.abs(stack.peek())){
+                        stack.pop();
+                        i += 1;
+                    }else if(Math.abs(current_element) < Math.abs(stack.peek())){
+                        i += 1;
+                    }else{
+                        stack.pop();
+                    }
+                }
+
+                else{
+                    stack.add(current_element);
+                    i += 1;
+                }
+
+            }
+
+        }
+
+        int[] arr = new int[stack.size()];
+        int j = arr.length-1;
+
+        while(!stack.isEmpty()){
+
+            arr[j] = stack.pop();
+            j-=1; 
+        }
+
+        return arr;
+
+    }
+}
+```
