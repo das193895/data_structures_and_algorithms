@@ -515,3 +515,144 @@ class Solution {
     }
 }
 ```
+
+## Largest Rectangle in a histogram (leetcode - 84) (Hard)
+
+```java
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+
+        ArrayList<Integer> nsi = nextSmalleridx(heights);
+        ArrayList<Integer> psi = previousSmalleridx(heights);
+
+        int max = Integer.MIN_VALUE;
+
+        for(int i = 0;i<heights.length;i++){
+
+            int current_area = heights[i]*(nsi.get(i)-psi.get(i)-1);
+            max = Math.max(max , current_area);
+        }
+
+        return max;
+        
+    }
+
+    public ArrayList<Integer> nextSmalleridx(int[] arr){
+
+        int n = arr.length;
+
+        ArrayList<Integer> result = new ArrayList<>();
+        for(int i = 0;i<n;i++){
+            result.add(-23);
+        }
+
+        Stack<Integer> stack = new Stack<>();
+
+        for(int i = n-1;i>=0;i--){
+            int current_element = arr[i];
+            int current_idx = i;
+
+            while(!stack.isEmpty() && arr[stack.peek()] >= current_element){
+                stack.pop();
+            }
+
+            if(stack.isEmpty()){
+                int nsi = n;
+                result.set(current_idx , nsi);
+            }else{
+                int nsi = stack.peek();
+                result.set(current_idx , nsi);
+            }
+
+            stack.add(current_idx);
+        }
+
+        return result;
+
+    }
+
+    public ArrayList<Integer> previousSmalleridx(int[] arr){
+          int n = arr.length;
+
+        ArrayList<Integer> result = new ArrayList<>();
+        for(int i = 0;i<n;i++){
+            result.add(-23);
+        }
+
+        Stack<Integer> stack = new Stack<>();
+
+        for(int i = 0;i<n;i++){
+            int current_element = arr[i];
+            int current_idx = i;
+
+            while(!stack.isEmpty() && arr[stack.peek()] >= current_element){
+                stack.pop();
+            }
+
+            if(stack.isEmpty()){
+                int nsi = -1;
+                result.set(current_idx , nsi);
+            }else{
+                int nsi = stack.peek();
+                result.set(current_idx , nsi);
+            }
+
+            stack.add(current_idx);
+        }
+
+        return result;
+    }
+}
+```
+
+## Remove k digits (leetcode - 402) (Medium)
+
+```java
+class Solution {
+    public String removeKdigits(String num, int k) {
+
+        Stack<Integer> stack = new Stack<>();
+
+        for(int i = 0;i<num.length();i++){
+
+            int current_element = Character.getNumericValue(num.charAt(i));
+
+            while(!stack.isEmpty() && stack.peek() > current_element){
+                if(k == 0){
+                    break;
+                }else{
+                    stack.pop();
+                    k -= 1;
+                }
+            }
+
+            stack.add(current_element);
+        }
+
+        // an edge case
+        while(k != 0){
+            stack.pop();
+            k -= 1;
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        while(!stack.isEmpty()){
+            sb.append(stack.pop());
+        }
+
+        // an edge case
+        while(sb.length() != 0 && sb.charAt(sb.length()-1) == '0'){
+            sb.deleteCharAt(sb.length()-1);
+        }
+
+        // an edge case
+        if(sb.length() == 0){
+            sb.append('0');
+        }
+
+        return sb.reverse().toString();
+        
+    }
+}
+```
