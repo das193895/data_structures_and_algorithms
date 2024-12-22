@@ -1,7 +1,5 @@
 # Questions Count 
 
-
-
 --> For performing any sorting related operation on a string , first convert it into its corresponding character array and then perform the operation on the array and convert it back to String;
 
 ## Longest Pallindrome (leetcode - 409) (Easy)
@@ -156,6 +154,99 @@ class Solution {
             }
         }
         return result;
+    }
+}
+```
+
+## Sort vowels in a string (leetcode - 2785) (Medium)
+
+```java
+class Solution {
+    public String sortVowels(String s) {
+
+        StringBuilder sb = new StringBuilder(s);
+
+        ArrayList<Character> char_list = new ArrayList<>();
+        ArrayList<Integer> idx_list = new ArrayList<>();
+
+        for(int i = 0;i<s.length();i++){
+            if(s.charAt(i) == 'a' || s.charAt(i) == 'e' || s.charAt(i) == 'i' || s.charAt(i) == 'o' || s.charAt(i) == 'u' || s.charAt(i) == 'A' || s.charAt(i) == 'E' || s.charAt(i) == 'I' || s.charAt(i) == 'O' || s.charAt(i) == 'U'){
+                char_list.add(s.charAt(i));
+                idx_list.add(i);
+            }
+        }
+
+        Collections.sort(char_list);
+
+        System.out.println(char_list);
+
+        for(int i = 0;i<char_list.size();i++){
+            sb.setCharAt(idx_list.get(i) , char_list.get(i));
+        }
+
+        return sb.toString();
+        
+    }
+}
+```
+
+## Sort Characters by Frequency (leetcode - 451) (medium)
+
+```java
+class Solution {
+
+    public class comparePair implements Comparator<Pair>{
+        @Override
+        public int compare(Pair p1 , Pair p2){
+            return p1.frequency - p2.frequency;
+        } 
+    }
+
+    public class Pair{
+        char ch;
+        int frequency;
+        public Pair(char c , int freq){
+            this.ch = c;
+            this.frequency = freq;
+        }
+    }
+
+    public String frequencySort(String s) {
+
+        HashMap<Character , Integer> map = new HashMap<>();
+
+        for(int i = 0;i<s.length();i++){
+            if(!map.containsKey(s.charAt(i))){
+                map.put(s.charAt(i) , 1);
+            }else{
+                int val = map.get(s.charAt(i));
+                map.put(s.charAt(i) , val+1);
+            }
+        }
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>(new comparePair());
+
+        for(char ch : map.keySet()){
+            Pair pair = new Pair(ch , map.get(ch));
+            pq.add(pair);
+        }
+
+        System.out.println(pq.peek().ch);
+
+        StringBuilder sb = new StringBuilder();
+
+        while(!pq.isEmpty()){
+            Pair p = pq.poll();
+
+            char ch = p.ch;
+            int freq = p.frequency;
+
+            for(int i = 0;i<freq;i++){
+                sb.append(ch);
+            }
+        }
+
+        return sb.reverse().toString();
     }
 }
 ```
