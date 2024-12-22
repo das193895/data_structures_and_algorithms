@@ -656,3 +656,97 @@ class Solution {
     }
 }
 ```
+
+## online stock span (leetcode - 901) (Medium)
+
+```java
+class StockSpanner {
+
+    Stack<int[]> stack;
+
+    public StockSpanner() {
+        this.stack = new Stack<>();
+    }
+    
+    public int next(int price) {
+
+        int span = -1;
+
+        int peek_idx = -1;
+
+        if(!this.stack.isEmpty()){
+            peek_idx = this.stack.peek()[1];
+        }
+
+        int current_idx = peek_idx + 1;
+
+        while(!this.stack.isEmpty() && this.stack.peek()[0] <= price){
+            stack.pop();
+        }
+
+        if(this.stack.isEmpty()){
+            span = current_idx - (-1);
+        }else{
+            span = current_idx - (this.stack.peek()[1]);
+        }
+
+        int[] arr = {price,current_idx};
+
+        this.stack.add(arr);
+
+        return span;
+        
+    }
+}
+
+/**
+ * Your StockSpanner object will be instantiated and called as such:
+ * StockSpanner obj = new StockSpanner();
+ * int param_1 = obj.next(price);
+ */
+```
+
+## Evalute reverse polish Notation (leetcode - 150) (Medium)
+
+```java
+class Solution {
+    public int evalRPN(String[] tokens) {
+
+        Stack<Integer> stack = new Stack<>();
+
+        for(int i = 0;i<tokens.length;i++){
+
+            if(tokens[i].equals("+") || tokens[i].equals("-") || tokens[i].equals("*") || tokens[i].equals("/")){
+
+                System.out.println(stack.size());
+
+
+                int element1 = stack.pop();
+                int element2 = stack.pop();
+
+                if(tokens[i].equals("+")){
+                    stack.push(element2 + element1); 
+
+                }else if(tokens[i].equals("-")){
+                    stack.push(element2 - element1); 
+
+                }else if(tokens[i].equals("*")){
+                    stack.push(element2 * element1); 
+
+                }else if(tokens[i].equals("/")){
+                    stack.push(element2 / element1); 
+                }
+
+
+            }else{
+                int digit = Integer.parseInt(tokens[i]);
+                System.out.println(i +" "+digit);
+                stack.add(digit);
+            }
+        }
+
+        return stack.pop();
+        
+    }
+}
+```
