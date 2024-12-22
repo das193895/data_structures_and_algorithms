@@ -1,5 +1,9 @@
 # Questions Count 
 
+
+
+--> For performing any sorting related operation on a string , first convert it into its corresponding character array and then perform the operation on the array and convert it back to String;
+
 ## Longest Pallindrome (leetcode - 409) (Easy)
 
 ```java
@@ -125,6 +129,33 @@ class Solution {
        
         return s1.contains(goal);
   
+    }
+}
+```
+
+## Check if the sentence in pangram (leetcode - 1832) (Easy)
+
+```java
+class Solution {
+    public boolean checkIfPangram(String sentence) {
+
+        boolean result = true;
+
+        boolean[] visited = new boolean[26];
+
+        for(int i = 0;i<sentence.length();i++){
+            int ascii = (int)(sentence.charAt(i));
+            visited[ascii-97] = true;
+        }
+
+        for(int i = 0;i < visited.length;i++){
+
+            if(visited[i] == false){
+                result = false;
+                break;
+            }
+        }
+        return result;
     }
 }
 ```
