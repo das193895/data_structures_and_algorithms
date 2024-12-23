@@ -251,3 +251,41 @@ class Solution {
 }
 ```
 
+## Reverse words in a string (leetcode - 151) (Medium)
+
+```java
+class Solution {
+
+    public String reverseWords(String s) {
+
+        StringBuilder sb = new StringBuilder(s);
+
+        sb.reverse();
+
+        StringBuilder result = new StringBuilder("");
+
+
+        int i = 0;
+        while(i<sb.length()){
+
+            StringBuilder individual = new StringBuilder("");
+
+            while(i<sb.length() && sb.charAt(i) != ' '){
+                individual.append(sb.charAt(i));
+                i++;
+            }
+
+            if(individual.length() != 0){
+                result.append(individual.reverse());
+                result.append(" ");
+            }
+            i++;
+        }
+
+        result.deleteCharAt(result.length()-1);
+        return result.toString();
+        
+    }
+}
+```
+
