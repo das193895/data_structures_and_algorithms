@@ -1262,4 +1262,447 @@ class Solution
 }
 ``` -->
 
+# Minimum Spanning tree & Disjoint set problems 
+
+## Prims Algorithm (gfg) (Medium)
+
+```java
+class Solution {
+    
+    static class Compare implements Comparator<int[]>{
+        @Override
+        public int compare(int[] arr1 , int[] arr2){
+            if(arr1[0] == arr2[0]){
+                return arr1[1] - arr2[1];
+            }else{
+                return arr1[0] - arr2[0];
+            }
+        }
+    }
+    static int spanningTree(int V, int E, List<List<int[]>> adj) {
+        // Code Here.
+        
+        boolean[] visited = new boolean[V];
+        
+        PriorityQueue<int[]> pq = new PriorityQueue<>(new Compare());
+        
+        int[] first = {0,0};
+        
+        int sum = 0;
+        
+        pq.add(first);
+        
+        while(!pq.isEmpty()){
+            
+            int[] node = pq.poll();
+            
+            if(!visited[node[1]]){
+                
+                visited[node[1]] = true;
+                
+                sum += node[0];
+                
+                for(int i = 0;i<adj.get(node[1]).size();i++){
+                    if(!visited[adj.get(node[1]).get(i)[0]]){
+                        int[] arr = {adj.get(node[1]).get(i)[1],adj.get(node[1]).get(i)[0]};
+                        pq.add(arr);
+                    }
+                }
+            }
+            
+        }
+        
+        return sum;
+    }
+}
+```
+
+## Disjoint Set (Union By rank)
+
+```java
+public class disjointSet{
+        int[] parent;
+        int[] rank;
+
+        public disjointSet(int n){
+            this.parent = new int[n];
+            this.rank = new int[n];
+
+            for(int i = 0;i<n;i++){
+                this.parent[i] = i;
+            }
+        }
+
+        public int findParent(int i){
+            if(i == parent[i]){
+                return i;
+            }
+
+            int par = findParent(parent[i]);
+
+            parent[i] = par;
+
+            return parent[i];
+        }
+
+        public void union(int i , int j){
+
+            int parentOfi = findParent(i);
+            int parentOfj = findParent(j);
+
+            if(parentOfi == parentOfj){
+                return;
+            }else if(rank[parentOfi] < rank[parentOfj]){
+                parent[parentOfi] = parentOfj;
+            }else if(rank[parentOfj] < rank[parentOfi]){
+                parent[parentOfj] = parentOfi;
+            }else{
+                parent[parentOfi] = parentOfj;
+                rank[parentOfj] += 1;
+            }
+        }
+    }
+```
+
+## Detect Cycle using DSU (gfg) (Medium)
+
+```java
+class Solution
+{
+    //Function to detect cycle using DSU in an undirected graph.
+    
+    // make DSU
+    
+    public class disjointSet{
+        
+        int[] parent;
+        int[] rank;
+        
+        public disjointSet(int V){
+            
+            this.rank = new int[V];
+            this.parent = new int[V];
+            
+            for(int i = 0;i<V;i++){
+                this.parent[i] = i;
+            }
+            
+        }
+        
+        public int findParent(int i){
+            if(parent[i] == i){
+                return i;
+            }
+            
+            int par = findParent(parent[i]);
+            
+            parent[i] = par;
+            
+            return parent[i];
+            
+        }
+        
+        public void unionByRank(int u , int v){
+            
+            int parentOfu = findParent(u);
+            int parentOfv = findParent(v);
+            
+            if(parentOfu == parentOfv){
+                return;
+            }
+            
+            if(rank[parentOfu] < rank[parentOfv]){
+                
+                parent[parentOfu] = parentOfv;
+            }else if(rank[parentOfu] > rank[parentOfv]){
+                parent[parentOfv] = parentOfu;
+                
+            }else{
+                parent[parentOfu] = parentOfv;
+                rank[parentOfv] ++;
+                
+            }
+        }
+        
+    }
+    
+    public int detectCycle(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        // Code here
+        
+        disjointSet ds = new disjointSet(V);
+        
+        for(int i = 0;i<adj.size();i++){
+            for(int j = 0;j<adj.get(i).size();j++){
+                int node1 = i;
+                int node2 = adj.get(i).get(j);
+                
+                if(node1 < node2){
+                    int parentOfnode1 = ds.findParent(node1);
+                    int parentOfnode2 = ds.findParent(node2);
+                    
+                    if(parentOfnode1 == parentOfnode2){
+                        return 1;
+                    }else{
+                        ds.unionByRank(parentOfnode1 , parentOfnode2);
+                    }
+                }
+                
+            }
+        }
+
+        return 0;
+    }
+}
+```
+
+## Satisfiability of Equality Equations (leetcode - 990) (Medium)
+
+```java
+class Solution {
+
+    public class disjointSet{
+        int[] rank;
+        int[] parent;
+
+        public disjointSet(){
+            this.rank = new int[26];
+            this.parent= new int[26];
+
+            for(int i = 0;i<26;i++){
+                this.parent[i] = i;
+            }
+        }
+
+        public int findParent(int i){
+            if(parent[i] == i){
+                return i;
+            }
+
+            int par = findParent(parent[i]);
+
+            parent[i] = par;
+
+            return parent[i];
+        }
+
+        public void union(int i , int j){
+            int parentOfi = findParent(i);
+            int parentOfj = findParent(j);
+
+            if(parentOfi == parentOfj){
+                return;
+            }
+
+            if(rank[parentOfi] < rank[parentOfj]){
+                parent[parentOfi] = parentOfj;
+            }
+            else if(rank[parentOfi] > rank[parentOfj]){
+                parent[parentOfj] = parentOfi;
+            }else{
+                parent[parentOfi] = parentOfj;
+                rank[parentOfj] += 1;
+            }
+        }
+
+    }
+    public boolean equationsPossible(String[] equations) {
+
+        disjointSet ds = new disjointSet();
+
+        int n = equations.length;
+
+        for(int i = 0;i<n;i++){
+            if(equations[i].charAt(1) == '='){
+                int firstChar = (int) equations[i].charAt(0) - (int) 'a';
+                int secondChar = (int) equations[i].charAt(3) - (int) 'a';
+                ds.union(firstChar , secondChar);
+            }
+        }
+
+
+        for(int i = 0;i<n;i++){
+            if(equations[i].charAt(1) == '!'){
+                int firstChar = (int) equations[i].charAt(0) - (int) 'a';
+                int secondChar = (int) equations[i].charAt(3) - (int) 'a';
+                
+                int firstParent = ds.findParent(firstChar);
+                int secondParent = ds.findParent(secondChar);
+
+                if(firstParent == secondParent){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+}
+```
+
+## Number Of Operations To make Network Connected (Medium) (leetcode - 1319)
+
+```java
+class Solution {
+
+    public class disjointSet{
+        int[] parent;
+        int[] rank;
+
+        public disjointSet(int n){
+            this.parent = new int[n];
+            this.rank = new int[n];
+
+            for(int i = 0;i<n;i++){
+                this.parent[i] = i;
+            }
+        }
+
+        public int findParent(int i){
+            if(parent[i] == i){
+                return i;
+            }
+
+            int par = findParent(parent[i]);
+
+            parent[i] = par;
+
+            return parent[i];
+        }
+
+        public void union(int i , int j){
+            int parentOfi = findParent(i);
+            int parentOfj = findParent(j);
+
+            if(parentOfi == parentOfj){
+                return;
+            }else if(rank[parentOfi] < rank[parentOfj]){
+                parent[parentOfi] = parentOfj;
+            }else if(rank[parentOfi] > rank[parentOfj]){
+                parent[parentOfj] = parentOfi;
+            }else{
+                parent[parentOfi] = parentOfj;
+                rank[parentOfj] += 1;
+            }
+        }
+    }
+
+    public int makeConnected(int n, int[][] connections) {
+
+        disjointSet ds = new disjointSet(n);
+
+        int noOfCables = connections.length;
+
+        if(n-1 > noOfCables){
+            return -1;
+        }
+
+        HashSet<Integer> set = new HashSet<>();
+
+        for(int i = 0;i<noOfCables;i++){
+            int ele1 = connections[i][0];
+            int ele2 = connections[i][1];
+
+            ds.union(ele1 , ele2);
+        }
+
+        for(int i = 0;i<n;i++){
+            int parent = ds.findParent(i);
+            if(!set.contains(parent)){
+                set.add(parent);
+            }
+        }
+        return set.size() - 1; 
+    }
+}
+```
+
+## Count unreachable pairs of nodes in an undirected graph (Medium) (leetcode - 2316)
+
+```java
+class Solution {
+    public class disjointSet{
+        int[] parent;
+        int[] rank;
+
+        public disjointSet(int n){
+            this.parent = new int[n];
+            this.rank = new int[n];
+
+            for(int i = 0;i<n;i++){
+                this.parent[i] = i;
+            }
+        }
+
+        public int findParent(int i){
+            if(i == parent[i]){
+                return i;
+            }
+
+            int par = findParent(parent[i]);
+
+            parent[i] = par;
+
+            return parent[i];
+        }
+
+        public void union(int i , int j){
+
+            int parentOfi = findParent(i);
+            int parentOfj = findParent(j);
+
+            if(parentOfi == parentOfj){
+                return;
+            }else if(rank[parentOfi] < rank[parentOfj]){
+                parent[parentOfi] = parentOfj;
+            }else if(rank[parentOfj] < rank[parentOfi]){
+                parent[parentOfj] = parentOfi;
+            }else{
+                parent[parentOfi] = parentOfj;
+                rank[parentOfj] += 1;
+            }
+        }
+    }
+    public long countPairs(int n, int[][] edges) {
+
+        disjointSet ds = new disjointSet(n);
+
+        int m = edges.length;
+
+        for(int i = 0;i<m;i++){
+            int ele1 = edges[i][0];
+            int ele2 = edges[i][1];
+            ds.union(ele1,ele2);
+        }
+
+        HashMap<Integer,Integer> map = new HashMap<>();
+
+        for(int i = 0;i<n;i++){
+            int parent = ds.findParent(i);
+
+            if(!map.containsKey(parent)){
+                map.put(parent,1);
+            }else{
+                int val = map.get(parent);
+                map.put(parent,val+1);
+            }
+        }
+
+        long ans = 0L;
+
+        long total = (long) n;
+
+        for(int key:map.keySet()){
+            
+            int val = map.get(key);
+
+            ans += val * (total-val);
+
+            total -= val;
+        } 
+        return ans;
+    }
+}
+```
+
 
