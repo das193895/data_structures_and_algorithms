@@ -374,6 +374,70 @@ class Solution
 }
 ```
 
+## Sortest Path in a binary matrix (gfg) (Medium)
+
+```java
+class Solution {
+    int shortestDistance(int N, int M, int A[][], int X, int Y) {
+        // code here
+        if(A[0][0] == 0 || A[X][Y] == 0){
+            return -1;
+        }
+        
+        if(X == 0 && Y == 0){
+            return 0;
+        }
+        
+        boolean[][] visited = new boolean[N][M];
+        
+        Queue<int[]> q = new LinkedList<>();
+        
+        int[] arr = {0,0,0};
+        
+        visited[0][0] = true;
+        
+        q.add(arr);
+        
+        while(!q.isEmpty()){
+            int[] node = q.poll();
+            
+            int dist = node[0];
+            int xCoord = node[1];
+            int yCoord = node[2];
+            
+            for(int i = -1;i<=1;i++){
+                for(int j = -1;j<=1;j++){
+                    int nxCoord = xCoord + i;
+                    int nyCoord = yCoord + j;
+                    
+                    if(nxCoord >= N || nxCoord < 0 || nyCoord >= M || nyCoord < 0){
+                        continue;
+                    }
+                    
+                    if(nxCoord == xCoord || nyCoord == yCoord){
+                        if(!visited[nxCoord][nyCoord] && A[nxCoord][nyCoord] == 1){
+                            visited[nxCoord][nyCoord] = true;
+                            
+                            int newDist = dist + 1;
+                            
+                            if(nxCoord == X && nyCoord == Y){
+                                return newDist;
+                            }else{
+                                int[] arr1 = {newDist,nxCoord,nyCoord};
+                                q.add(arr1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return -1;
+        
+    }
+};
+```
+
 ## Detect Cycle in undirected graph (gfg) (Medium)
 
 ```java
@@ -1107,7 +1171,7 @@ class Solution {
 }
 ```
 
-<!-- # Shortest Path Algorithms
+# Shortest Path Algorithms
 
 ## Shortest Path in undirected graph (gfg) (Medium)
 
@@ -1260,7 +1324,600 @@ class Solution
         return distance;
     }
 }
-``` -->
+```
+
+## Network Delay time (leetcode - 743) (Medium)
+
+```java
+class Solution {
+    class compareArrays implements Comparator<int[]>{
+        @Override
+        public int compare(int[] arr1 , int[] arr2){
+            if(arr1[1] != arr2[1]){
+                return arr1[1] - arr2[1];
+            }else{
+                return arr1[0] - arr2[0];
+            }
+        }
+    }
+    public int networkDelayTime(int[][] times, int n, int k) {
+
+        int[] result = new int[n+1];
+
+        for(int i = 0;i<n+1;i++){
+            result[i] = Integer.MAX_VALUE;
+        }
+        
+        ArrayList<ArrayList<int[]>> adj = new ArrayList<>();
+
+        for(int i = 0;i<n+1;i++){
+            adj.add(new ArrayList<>());
+        }
+
+        for(int i = 0;i<times.length;i++){
+            int node1 = times[i][0];
+            int node2 = times[i][1];
+            int weight = times[i][2];
+
+            ArrayList<int[]> list = adj.get(node1);
+            int[] arr = {node2,weight};
+            list.add(arr);
+        }
+        
+        PriorityQueue<int[]> pq = new PriorityQueue<>(new compareArrays());
+
+        int[] arr1 = {k,0};
+        result[k] = 0;
+
+        pq.add(arr1);
+
+        while(!pq.isEmpty()){
+            int[] node = pq.poll();
+
+            int element = node[0];
+            int dist = node[1];
+
+            for(int i = 0;i<adj.get(element).size();i++){
+                int[] neighborsNode = adj.get(element).get(i);
+
+                int neighbors = neighborsNode[0];
+                int nDist = neighborsNode[1];
+
+                int newDist = dist + nDist;
+
+                if(result[neighbors] > newDist){
+                    result[neighbors] = newDist;
+                    int[] arr = {neighbors,newDist};
+                    pq.add(arr);
+                }
+            }
+        }
+
+        int finalResult = Integer.MIN_VALUE;
+        for(int i = 0;i<result.length;i++){
+            if(i == 0){
+                continue;
+            }
+            if(result[i] == Integer.MAX_VALUE){
+                return -1;
+            }else{
+                finalResult = Math.max(finalResult,result[i]);
+            }
+        }
+
+        return finalResult;
+    }
+}
+```
+
+## Shortest Path in binary maze (leetcode - 1091) (Medium)
+
+Can be done by only applying BFS
+
+```java
+class Solution {
+
+    class compareArrays implements Comparator<int[]>{
+        @Override
+        public int compare(int[] arr1,int[] arr2){
+            if(arr1[0] == arr2[0]){
+                if(arr1[1] == arr2[1]){
+                    return arr1[2]-arr2[2];
+                }else{
+                    return arr1[1]-arr2[1];
+                }
+            }else{
+                return arr1[0]-arr2[0];
+            }
+        }
+    }
+
+    public int shortestPathBinaryMatrix(int[][] grid) {
+
+        int n = grid.length;
+
+        if(grid[0][0] == 1 || grid[n-1][n-1] == 1){
+            return -1;
+        }
+
+        int[][] distance = new int[n][n];
+
+        for(int i = 0;i<n;i++){
+            for(int j = 0;j<n;j++){
+                distance[i][j] = Integer.MAX_VALUE;
+            }
+        }
+
+        boolean[][] visited = new boolean[n][n];
+
+        distance[0][0] = 0;
+        visited[0][0] = true;
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>(new compareArrays());
+        int[] arr = {0,0,0};
+        pq.add(arr);
+
+        while(!pq.isEmpty()){
+
+            int[] node = pq.poll();
+
+            int dist = node[0];
+            int xCoord = node[1];
+            int yCoord = node[2];
+
+            for(int i = -1;i<=1;i++){
+                for(int j = -1;j<=1;j++){
+                    int nxCoord = xCoord + i;
+                    int nyCoord = yCoord + j;
+
+                    if(nxCoord < 0 || nxCoord >= n || nyCoord < 0 || nyCoord >= n){
+                        continue;
+                    } 
+
+                    if(!visited[nxCoord][nyCoord] && grid[nxCoord][nyCoord] != 1){
+                        visited[nxCoord][nyCoord] = true;
+                        int newDist = dist + 1;
+                        if(distance[nxCoord][nyCoord] > newDist){
+                            distance[nxCoord][nyCoord] = newDist;
+                            int[] arr1 = {newDist,nxCoord,nyCoord};
+                            pq.add(arr1);
+                        }
+                    }
+                }
+            }
+        }
+
+        if(!visited[n-1][n-1]){
+            return -1;
+        }
+
+        return distance[n-1][n-1] + 1;
+        
+    }
+}
+```
+## Path with mimimum effort (leetcode - 1631) (Medium)
+
+```java
+class Solution {
+    public class compareArrays implements Comparator<int[]>{
+        @Override
+        public int compare(int[] arr1 , int[] arr2){
+            if(arr1[0] == arr2[0]){
+                if(arr1[1] == arr2[1]){
+                    return arr1[2] - arr2[2];
+                }else{
+                    return arr1[1] - arr2[1];
+                }
+            }else{
+                return arr1[0] - arr2[0];
+            }
+        }
+    }
+    
+    public int minimumEffortPath(int[][] heights) {
+
+        int m = heights.length;
+        int n = heights[0].length;
+
+        int[][] distance = new int[m][n];
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>(new compareArrays());
+
+        for(int i = 0;i<m;i++){
+            for(int j = 0;j< n;j++){
+                distance[i][j] = Integer.MAX_VALUE;
+            }
+        }
+
+        distance[0][0] = 0;
+
+        int[] arr = {0,0,0};
+
+        pq.add(arr);
+
+        while(!pq.isEmpty()){
+            int[] node = pq.poll();
+
+            int dist = node[0];
+            int xCoord = node[1];
+            int yCoord = node[2];
+
+            for(int i = -1;i<=1;i++){
+                for(int j = -1;j<=1;j++){
+                    int nxCoord = xCoord + i;
+                    int nyCoord = yCoord + j;
+
+                    if(nxCoord < 0 || nxCoord >= m || nyCoord < 0 || nyCoord >= n){
+                        continue;
+                    }
+
+                    if(nxCoord == xCoord || nyCoord == yCoord){
+                        int diffOfHeight = Math.abs(heights[nxCoord][nyCoord] - heights[xCoord][yCoord]); 
+
+                        int maxDiffOfHeight = Math.max(dist,diffOfHeight);
+
+                        if(maxDiffOfHeight < distance[nxCoord][nyCoord]){
+                            distance[nxCoord][nyCoord] = maxDiffOfHeight;
+
+                            int[] arr1 = {maxDiffOfHeight,nxCoord,nyCoord};
+
+                            pq.add(arr1);
+                        }
+                    }
+                }
+            }
+        }
+
+        return distance[m-1][n-1];   
+    }
+}
+```
+
+## Number of ways to arrive at destination (leetcode - 1976) (Medium)
+
+```java
+class Solution {
+    public class compareArrays implements Comparator<long[]>{
+        @Override
+        public int compare(long[] arr1 , long[] arr2){
+            if(arr1[0] == arr2[0]){
+                return (int)arr1[1] - (int)arr2[1];
+            }else{
+                return (int)arr1[0]- (int)arr2[0];
+            }
+        }
+    }
+    public int countPaths(int n, int[][] roads) {
+
+        ArrayList<ArrayList<int[]>> adj = new ArrayList<>();
+
+        long[] result = new long[n];
+        int[] ways = new int[n];
+
+        for(int i = 0;i<n;i++){
+            adj.add(new ArrayList<>());
+            result[i] = (long) Long.MAX_VALUE;
+            ways[i] = 0;
+        }
+
+        for(int i = 0;i<roads.length;i++){
+            int node1 = roads[i][0];
+            int node2 = roads[i][1];
+            int weight = roads[i][2];
+
+            ArrayList<int[]> arr1 = adj.get(node1);
+            int[] array1 = {node2,weight};
+            arr1.add(array1);
+
+            ArrayList<int[]> arr2 = adj.get(node2);
+            int[] array2 = {node1,weight};
+            arr2.add(array2);
+        }
+
+        PriorityQueue<long[]> pq = new PriorityQueue<>(new compareArrays());
+
+        long[] arr = {0L,0L};
+
+        result[0] = 0L;
+        ways[0] = 1;
+
+        pq.add(arr);
+
+        int count = 0;
+
+        while(!pq.isEmpty()){
+            long[] node = pq.poll();
+
+            long dist = node[0];
+
+            long element = node[1];
+
+            for(int i = 0;i<adj.get((int)element).size();i++){
+                int[] neighhborNode = adj.get((int)element).get(i);
+                int weight = neighhborNode[1];
+                int neighbor = neighhborNode[0];
+
+                long nDist = (long)weight + (long)dist;
+
+                if(nDist < result[neighbor]){
+                    result[neighbor] = nDist;
+                    ways[neighbor] = ways[(int)element];
+                    long[] arr1 = {nDist,neighbor};
+                    pq.add(arr1);
+                }else if(nDist == result[neighbor]){
+                    System.out.println(nDist);
+                    int prev = ways[neighbor];
+                    int current = (prev + ways[(int)element]) % (int)(1e9+7);
+                    ways[neighbor] = current;
+                }
+            }
+        }
+
+        return ways[n-1] % (int)(1e9+7);
+        
+    }
+}
+```
+
+## Chepest flight with k stops (leetcode - 787) (Medium)
+
+Apply dijkstra like simple BFS.
+
+```java
+class Solution {
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+
+        ArrayList<ArrayList<int[]>> adj = new ArrayList<>();
+
+        int[] distance = new int[n];
+
+        for(int i = 0;i<n;i++){
+            adj.add(new ArrayList<>());
+            distance[i] = Integer.MAX_VALUE;
+        }
+
+        for(int i = 0;i<flights.length;i++){
+            int u = flights[i][0];
+            int v = flights[i][1];
+            int w = flights[i][2];
+
+            ArrayList<int[]> arr1 = adj.get(u);
+            int[] array = {v,w};
+            arr1.add(array);
+        }
+
+        distance[src] = 0;
+
+        Queue<int[]> q = new LinkedList<>();
+
+        int[] arr = {0,src};
+
+        q.add(arr);
+
+        int stops = 0;
+
+        while(!q.isEmpty()){
+
+            if(stops > k){
+                break;
+            }
+
+            int size = q.size();
+
+            for(int i = 0;i<size;i++){
+                int[] node = q.poll();
+
+                int element = node[1];
+                int dist =  node[0];
+
+                for(int j = 0;j<adj.get(element).size();j++){
+
+                    int[] neighborNode = adj.get(element).get(j);
+
+                    int neighbor = neighborNode[0];
+                    int weight = neighborNode[1];
+
+                    int newDist = dist + weight;
+
+                    if(newDist < distance[neighbor]){
+                        distance[neighbor] = newDist;
+                        int[] arr2 = {newDist,neighbor};
+                        q.add(arr2);
+                    }
+                }
+            }
+            stops += 1;
+        }
+
+        if(distance[dst] == Integer.MAX_VALUE){
+            return -1;
+        }else{
+            return distance[dst];
+        }
+    }
+}
+```
+
+
+
+## Bellman - Ford (gfg) (Medium)
+
+only applicable for directed graphs & can be aaplied even if the graph has negative weights & helps in detecting negative loops 
+
+```java
+// User function Template for Java
+
+/*   Function to implement Bellman Ford
+ *   edges: 2D array which represents the graph
+ *   src: source vertex
+ *   V: number of vertices
+ */
+class Solution {
+    static int[] bellmanFord(int V, int[][] edges, int src) {
+        // Write your code here
+        
+        int[] distance = new int[V];
+        
+        for(int i = 0;i<distance.length;i++){
+            distance[i] = (int)1e8;
+        }
+        
+        distance[src] = 0;
+        
+        for(int i = 0;i<V-1;i++){
+            for(int j = 0;j<edges.length;j++){
+                
+                int node1 = edges[j][0];
+                int node2 = edges[j][1];
+                int edgeW = edges[j][2];
+                
+                if(distance[node1] == (int)1e8){
+                    continue;
+                }else{
+                    
+                    int nDist = edgeW + distance[node1];
+                
+                    if(nDist < distance[node2]){
+                        distance[node2] = nDist;
+                    }
+                }
+            }
+        }
+        
+        // detecting negative cycle
+        
+        for(int j = 0;j<edges.length;j++){
+            
+            int node1 = edges[j][0];
+            int node2 = edges[j][1];
+            int edgeW = edges[j][2];
+            
+            if(distance[node1] == (int)1e8){
+                continue;
+            }else{
+                
+                int nDist = edgeW + distance[node1];
+            
+                if(nDist < distance[node2]){
+                    int[] arr = {-1};
+                    return arr;
+                }
+            }
+        }
+        
+        return distance;
+        
+    }
+}
+```
+
+## Floyd - Warshall Algorithm (gfg) (Medium)
+
+only applicable for directed graphs & can be aaplied even if the graph has negative weights & helps in detecting negative loops 
+
+```java
+class Solution {
+    public void shortestDistance(int[][] mat) {
+        // Code here
+        
+        for(int i = 0;i<mat.length;i++){
+            for(int j = 0;j<mat[0].length;j++){
+                if(mat[i][j] == -1){
+                    mat[i][j] = (int)1e5;
+                }
+            }
+        }
+        
+        for(int i = 0;i<mat.length;i++){
+            for(int j = 0;j<mat.length;j++){
+                for(int k = 0;k<mat[0].length;k++){
+                    
+                    mat[j][k] = Math.min(mat[j][k],mat[j][i]+mat[i][k]);
+                }
+            }
+        }
+        
+        
+        
+        for(int i = 0;i<mat.length;i++){
+            for(int j = 0;j<mat[0].length;j++){
+                if(mat[i][j] >= (int)1e5){
+                    mat[i][j] = -1;
+                }
+            }
+        }
+        
+        // detect negative cycle
+        
+        for(int i = 0;i<mat.length;i++){
+            if(mat[i][i] != 0){
+                System.out.println("Negative cycle detected");
+                break;
+            }
+        }
+        
+    }
+}
+```
+
+## Find the city with the smallest number of neighbors at a threshold distance (leetcode - 1334) (Medium)
+
+```java
+class Solution {
+    public int findTheCity(int n, int[][] edges, int distanceThreshold) {
+
+        int[][] adj_matrix = new int[n][n];
+
+        for(int i = 0;i<n;i++){
+            for(int j = 0;j<n;j++){
+                adj_matrix[i][j] = (int)(1e8);
+            }
+        }
+
+        for(int i = 0;i<edges.length;i++){
+            int u = edges[i][0];
+            int v = edges[i][1];
+            int w = edges[i][2];
+
+            adj_matrix[u][v] = w;
+            adj_matrix[v][u] = w;
+        }
+
+        for(int via = 0;via<n;via++){
+            for(int i = 0;i<n;i++){
+                for(int j = 0;j<n;j++){
+                    adj_matrix[i][j] = Math.min(adj_matrix[i][j],adj_matrix[i][via]+adj_matrix[via][j]);
+                }
+            }
+        }
+
+        int city = -1;
+
+        int numOfCities = Integer.MAX_VALUE;
+
+        for(int i = 0;i<adj_matrix.length;i++){
+            
+            int cityCount = 0;
+            for(int j = 0;j<adj_matrix[0].length;j++){
+                if(i == j){
+                    continue;
+                }
+                if(adj_matrix[i][j] <= distanceThreshold){
+                    cityCount += 1;
+                }
+            }
+            if(numOfCities >= cityCount){
+                numOfCities = cityCount;
+                city = i;
+            }
+        }
+
+        return city;
+        
+    }
+}
+```
 
 # Minimum Spanning tree & Disjoint set problems 
 
@@ -1447,7 +2104,6 @@ class Solution
                         ds.unionByRank(parentOfnode1 , parentOfnode2);
                     }
                 }
-                
             }
         }
 
@@ -1704,5 +2360,263 @@ class Solution {
     }
 }
 ```
+
+## Accounts Merge (leetcode 721) (Medium)
+
+```java
+class Solution {
+
+    public class disjointSet{
+        int[] parent;
+        int[] rank;
+
+        public disjointSet(int n){
+            this.rank = new int[n];
+            this.parent = new int[n];
+            for(int i = 0;i<n;i++){
+                this.parent[i] = i;
+            }
+        }
+
+        public int findParent(int i){
+            if(i == parent[i]){
+                return i;
+            }
+
+            return parent[i] = findParent(parent[i]);
+        }
+
+        public void union(int i , int j){
+            int parentOfi = findParent(i);
+            int parentOfj = findParent(j);
+
+            if(parentOfi == parentOfj){
+                return;
+            }else if(rank[parentOfi] < rank[parentOfj]){
+                parent[parentOfi] = parentOfj;
+            }else if(rank[parentOfj] < rank[parentOfi]){
+                parent[parentOfj] = parentOfi;
+            }else{
+                parent[parentOfi] = parentOfj;
+                rank[parentOfj] += 1;
+            }
+        }
+    }
+    public List<List<String>> accountsMerge(List<List<String>> accounts) {
+
+        int n = accounts.size();
+
+        List<List<String>> result = new ArrayList<>();
+
+        for(int i = 0;i<n;i++){
+            result.add(new ArrayList<>());
+        }
+
+        disjointSet ds = new disjointSet(n);
+
+
+        HashMap<String,Integer> map = new HashMap<>();
+
+        for(int i = 0;i<n;i++){
+            for(int j = 1;j<accounts.get(i).size();j++){
+
+                String element = accounts.get(i).get(j);
+
+                if(!map.containsKey(element)){
+                    map.put(element,i);
+                }else{
+                    int val = map.get(element);
+                    ds.union(i,val);
+                }
+            }
+        }
+
+        for(String key : map.keySet()){
+            int val = map.get(key);
+            int parent = ds.findParent(val);
+            String name = accounts.get(parent).get(0);
+
+            if(result.get(parent).size() == 0){
+
+                List<String> list = new ArrayList<>();
+                list.add(name);
+                list.add(key);
+                result.set(parent,list);
+
+            }else{
+                List<String> list = result.get(parent);
+                list.add(key);
+                result.set(parent,list);
+            }
+        }
+
+        for(int i = result.size() - 1; i >= 0; i--){ // backword loop is necessary 
+            if(result.get(i).size() == 0){
+                result.remove(i);
+            }else{
+                Collections.sort(result.get(i).subList(1,result.get(i).size()));
+            }
+        }
+
+        return result;
+
+    }
+}
+```
+
+# Bridges In Graph 
+
+## Critical connections in a network (leetcode -- 1192) (Hard)
+
+```java
+class Solution {
+    private int timer = 0;
+    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {
+
+        List<List<Integer>> bridges = new ArrayList<>();
+
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+
+        for(int i = 0;i<n;i++){
+            adj.add(new ArrayList<>());
+        }
+
+        for(int i = 0;i<connections.size();i++){
+            int node0 = connections.get(i).get(0);
+            int node1 = connections.get(i).get(1);
+
+            ArrayList<Integer> arr1 = adj.get(node1);
+            arr1.add(node0);
+
+            ArrayList<Integer> arr2 = adj.get(node0);
+            arr2.add(node1);
+        }
+
+        int[] tin = new int[n];
+        int[] low = new int[n];
+        boolean[] visited = new boolean[n];
+
+        dfs(0,-1,adj,tin,visited,low,bridges);
+
+        return bridges; 
+    }
+
+    public void dfs(int node , int parent , ArrayList<ArrayList<Integer>> adj,int[]tin,boolean[] visited,int[] low,List<List<Integer>> bridges){
+        visited[node] = true;
+
+        timer += 1;
+
+        tin[node] = low[node] = timer;
+
+        for(int i = 0;i<adj.get(node).size();i++){
+            int neighbors = adj.get(node).get(i);
+            if(neighbors == parent){
+                continue;
+            }
+            if(!visited[neighbors]){
+                dfs(neighbors,node,adj,tin,visited,low,bridges);
+
+                low[node] = Math.min(low[node],low[neighbors]);
+
+                if(tin[node] < low[neighbors]){
+                    List<Integer> list = new ArrayList<>();
+                    list.add(node);
+                    list.add(neighbors);
+                    bridges.add(list);
+                }
+
+            }else{
+                low[node] = Math.min(low[node],low[neighbors]);
+            }
+        }
+
+    }
+}
+```
+
+# Strongly Connected Components 
+
+## Kosaraju's Algo (Hard)
+
+```java
+public class Solution {
+	public static int stronglyConnectedComponents(int v, ArrayList<ArrayList<Integer>> edges) {
+		// Write your code here.
+		Stack<Integer> stack = new Stack<>();
+
+		ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+		ArrayList<ArrayList<Integer>> reverse_adj = new ArrayList<>();
+
+		boolean[] visited1= new boolean[v];
+		boolean[] visited2= new boolean[v];
+
+		for(int i = 0;i<v;i++){
+			adj.add(new ArrayList<>());
+			reverse_adj.add(new ArrayList<>());
+		}
+
+		for(int i = 0;i<edges.size();i++){
+			int node1 = edges.get(i).get(0);
+			int node2 = edges.get(i).get(1);
+
+			ArrayList<Integer> arr1 = adj.get(node1);
+			arr1.add(node2);
+		}
+
+		for(int i = 0;i<adj.size();i++){
+			for(int j = 0;j<adj.get(i).size();j++){
+				int node1 = i;
+				int node2 = adj.get(i).get(j);
+				ArrayList<Integer> arr1 = reverse_adj.get(node2);
+				arr1.add(node1);
+			}
+		}
+
+		for(int i= 0;i<v;i++){
+			if(!visited1[i]){
+				dfs(i,adj,stack,visited1);
+			}
+		}
+
+		int count = 0;
+
+		while(!stack.isEmpty()){
+			int element = stack.pop();
+			if(!visited2[element]){
+				dfs1(element,reverse_adj,visited2);
+				count+=1;
+			}
+		}
+
+		return count;
+
+	}
+
+	public static void dfs(int node,ArrayList<ArrayList<Integer>> adj,Stack<Integer>stack,boolean[]visited){
+		visited[node] = true;
+
+		for(int i = 0;i<adj.get(node).size();i++){
+			int neighbors = adj.get(node).get(i);
+			if(!visited[neighbors]){
+				dfs(neighbors,adj,stack,visited);
+			}
+		}
+
+		stack.add(node);
+	}
+
+	public static void dfs1(int node,ArrayList<ArrayList<Integer>> adj,boolean[]visited){
+		visited[node] = true;
+
+		for(int i = 0;i<adj.get(node).size();i++){
+			int neighbors = adj.get(node).get(i);
+			if(!visited[neighbors]){
+				dfs1(neighbors,adj,visited);
+			}
+		}
+	}
+}
+```
+
 
 
