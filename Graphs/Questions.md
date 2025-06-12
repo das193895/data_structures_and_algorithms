@@ -374,7 +374,7 @@ class Solution
 }
 ```
 
-## Sortest Path in a binary matrix (gfg) (Medium)
+## Sortest Path in a binary matrix (gfg) (leetcode 1091) (Medium)
 
 ```java
 class Solution {
