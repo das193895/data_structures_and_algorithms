@@ -366,7 +366,7 @@ class Solution {
             count++;
         }
 
-        if(count <= 1){
+        if(count <= 1){   // (<) is for handling cases like [1  , 1 , 1]
             return true;
         }
         else{
